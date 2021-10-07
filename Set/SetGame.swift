@@ -10,11 +10,16 @@ import Foundation
 struct SetGame<CardContentShape, CardContentColor, CardContentPattern, NumberOfShapes>{
     private var numberOfPlayingCards: Int
     private let totalNumberOfCards = 81
-    private let initialNumberOfPlayingCards = 12
+    private let initialNumberOfPlayingCards = 81
     private let createCardContent: (Int) -> Card.CardContent
     private(set) var playingCards: [Card]
     
+    private var id = [Int]()
+    
     mutating func choose(_ card: Card) {
+        if !card.isFaceUp {
+            
+        }
         
     }
     
@@ -35,13 +40,13 @@ struct SetGame<CardContentShape, CardContentColor, CardContentPattern, NumberOfS
             let content = createCardContent(index)
             playingCards.append(Card(content: content, id: index))
         }
-        numberOfPlayingCards = 12
+        numberOfPlayingCards = 81
     }
     
     struct Card: Identifiable {
         let content: CardContent
-        let isFaceUp = true
-        let isMatched = false
+        var isFaceUp = true
+        var isMatched = false
         let id: Int
         
         struct CardContent {

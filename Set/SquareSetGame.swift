@@ -10,7 +10,7 @@ import SwiftUI
 class SquareSetGame: ObservableObject {
     typealias Card = SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes>.Card
     
-    static let cardContents: [Card.CardContent] = {
+    static var cardContents: [Card.CardContent] = {
         var contents = [Card.CardContent]()
         
         for shape in ContentShape.allCases {
@@ -26,7 +26,7 @@ class SquareSetGame: ObservableObject {
     }()
     
     static private func createSetGame() -> SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> {
-        SetGame { cardContents[$0] }
+        return SetGame { cardContents[$0] }
     }
     
     
@@ -47,6 +47,8 @@ class SquareSetGame: ObservableObject {
     }
     
     func newGame() {
+        SquareSetGame.cardContents.shuffle()
+        model = SquareSetGame.createSetGame()
         
     }
     

@@ -13,19 +13,34 @@ struct SquareSetGameView: View {
     var body: some View {
         VStack {
             ScrollView {
-                AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-                    CardView(card: card)
-                        .padding(5)
-                        .onTapGesture {
-                            game.choose(card)
-                        }
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
+                    ForEach(game.cards) { card in
+                        CardView(card: card)
+                            .padding(2)
+                            .onTapGesture {
+                                game.choose(card)
+                            }
+                            .aspectRatio(2/3, contentMode: .fit)
+                        
+                    }
+                    
                 }
-                .padding(.horizontal)
-                .foregroundColor(.blue)
             }
+            .padding(.horizontal)
+            .foregroundColor(.blue)
+//                AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+//                    CardView(card: card)
+//                        .padding(5)
+//                        .onTapGesture {
+//                            game.choose(card)
+//                        }
+//                }
+//                .padding(.horizontal)
+//                .foregroundColor(.blue)
             HStack {
-                Spacer()
+//                Spacer()
                 Button {
+                    game.newGame()
                 } label: {
                     Text("New Game")
                 }
@@ -35,8 +50,9 @@ struct SquareSetGameView: View {
                 } label: {
                     Text("Deal 3 Cards")
                 }
-                Spacer()
+//                Spacer()
             }
+            .padding()
             
         }
     }
