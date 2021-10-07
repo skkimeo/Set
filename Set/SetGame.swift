@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SetGame<CardShape, CardColor, CardPattern, NumberOfShapes>{
+struct SetGame<CardContentShape, CardContentColor, CardContentPattern, NumberOfShapes>{
     private(set) var cardDeck: [Card]
     private(set) var playingCards: [Card]
     
@@ -39,9 +39,9 @@ struct SetGame<CardShape, CardColor, CardPattern, NumberOfShapes>{
         let id: Int
         
         struct CardContent {
-            let shape: CardShape
-            let color: CardColor
-            let pattern: CardPattern
+            let shape: CardContentShape
+            let color: CardContentColor
+            let pattern: CardContentPattern
             let numberOfShapes: Int
         }
     }

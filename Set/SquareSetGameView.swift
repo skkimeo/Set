@@ -15,6 +15,9 @@ struct SquareSetGameView: View {
             ScrollView {
                 AspectVGrid(items: game.cards, aspectRatio: 2/3) {
                     CardView(card: $0)
+                        .onTapGesture {
+                            //
+                        }
                 }
             }
             HStack {

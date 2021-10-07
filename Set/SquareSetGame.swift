@@ -8,15 +8,15 @@
 import SwiftUI
 
 class SquareSetGame: ObservableObject {
-    typealias Card = SetGame<Shape, Color, Pattern, NumberOfShapes>.Card
+    typealias Card = SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes>.Card
     
     static let cardContents: [Card.CardContent] = {
         var contents = [Card.CardContent]()
         
-        for shape in Shape.allCases {
-            for color in Color.allCases {
-                for pattern in Pattern.allCases {
-                    for numberOfShapes in NumberOfShapes.allCases {
+        for shape in ContentShape.allCases {
+            for color in ContentColor.allCases {
+                for pattern in ContentPattern.allCases {
+                    for numberOfShapes in NumberOfContentShapes.allCases {
                         contents.append(Card.CardContent( shape: shape, color: color, pattern: pattern, numberOfShapes: numberOfShapes.rawValue))
                     }
                 }
@@ -25,7 +25,7 @@ class SquareSetGame: ObservableObject {
         return contents.shuffled()
     }()
     
-    static private func createSetGame() -> SetGame<Shape, Color, Pattern, NumberOfShapes> {
+    static private func createSetGame() -> SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> {
         SetGame { cardContents[$0] }
     }
     
@@ -36,32 +36,40 @@ class SquareSetGame: ObservableObject {
         model.playingCards
     }
     
+    // MARK: -Intent(s)
+    
+    func choose(_ card: Card) {
+        model.choose(card)
+    }
+    
+    func dealThreeCards() {
+        model.deal_three_cards()
+    }
+    
+    func newGame() {
+        
+    }
     
     
-    
-    
-    
-    
-    
-    enum Shape: CaseIterable {
+    enum ContentShape: CaseIterable {
         case roundedRectangle
         case diamond
         case square
     }
     
-    enum Color: CaseIterable {
+    enum ContentColor: CaseIterable {
         case red
         case green
         case purple
     }
     
-    enum Pattern: CaseIterable {
+    enum ContentPattern: CaseIterable {
         case filled
         case stroked
         case shaeded
     }
     
-    enum NumberOfShapes: Int, CaseIterable {
+    enum NumberOfContentShapes: Int, CaseIterable {
         case one = 1
         case two
         case three
