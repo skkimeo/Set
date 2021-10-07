@@ -13,6 +13,8 @@
 		A4362C74270E824B004C4235 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4362C73270E824B004C4235 /* Preview Assets.xcassets */; };
 		A4362C7C270E876D004C4235 /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4362C7B270E876D004C4235 /* SetGame.swift */; };
 		A4362C7E270E8796004C4235 /* SquareSetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4362C7D270E8796004C4235 /* SquareSetGame.swift */; };
+		A4362C80270ED114004C4235 /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4362C7F270ED114004C4235 /* AspectVGrid.swift */; };
+		A4362C82270ED29C004C4235 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4362C81270ED29C004C4235 /* CardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		A4362C75270E824B004C4235 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4362C7B270E876D004C4235 /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
 		A4362C7D270E8796004C4235 /* SquareSetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareSetGame.swift; sourceTree = "<group>"; };
+		A4362C7F270ED114004C4235 /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = SOURCE_ROOT; };
+		A4362C81270ED29C004C4235 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,8 @@
 		A4362C6B270E824A004C4235 /* Set */ = {
 			isa = PBXGroup;
 			children = (
+				A4362C81270ED29C004C4235 /* CardView.swift */,
+				A4362C7F270ED114004C4235 /* AspectVGrid.swift */,
 				A4362C6C270E824A004C4235 /* SetApp.swift */,
 				A4362C6E270E824A004C4235 /* SquareSetGameView.swift */,
 				A4362C7B270E876D004C4235 /* SetGame.swift */,
@@ -147,6 +153,8 @@
 				A4362C6F270E824A004C4235 /* SquareSetGameView.swift in Sources */,
 				A4362C7E270E8796004C4235 /* SquareSetGame.swift in Sources */,
 				A4362C7C270E876D004C4235 /* SetGame.swift in Sources */,
+				A4362C80270ED114004C4235 /* AspectVGrid.swift in Sources */,
+				A4362C82270ED29C004C4235 /* CardView.swift in Sources */,
 				A4362C6D270E824A004C4235 /* SetApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

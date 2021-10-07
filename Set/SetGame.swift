@@ -25,17 +25,18 @@ struct SetGame<CardShape, CardColor, CardPattern, NumberOfShapes>{
         for index in 0..<81 {
             let content = createCardContent(index)
             if index < 12 {
-                playingCards.append(Card(content: content))
+                playingCards.append(Card(content: content, id: index))
             } else {
-                cardDeck.append(Card(content: content))
+                cardDeck.append(Card(content: content, id: index))
             }
         }
     }
     
-    struct Card {
+    struct Card: Identifiable {
         let content: CardContent
         let isFaceUp = false
         let isMatched = false
+        let id: Int
         
         struct CardContent {
             let shape: CardShape

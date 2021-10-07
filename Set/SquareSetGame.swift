@@ -22,7 +22,7 @@ class SquareSetGame: ObservableObject {
                 }
             }
         }
-        return contents
+        return contents.shuffled()
     }()
     
     static private func createSetGame() -> SetGame<Shape, Color, Pattern, NumberOfShapes> {
@@ -32,6 +32,9 @@ class SquareSetGame: ObservableObject {
     
     @Published private var model = createSetGame()
     
+    var cards: [Card] {
+        model.playingCards
+    }
     
     
     
