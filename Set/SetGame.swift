@@ -8,7 +8,10 @@
 import Foundation
 
 struct SetGame<CardContentShape, CardContentColor, CardContentPattern, NumberOfShapes>{
-    private(set) var cardDeck: [Card]
+    private var numberOfPlayingCards: Int
+    private let totalNumberOfCards = 81
+    private let initialNumberOfPlayingCards = 12
+    private let createCardContent: (Int) -> Card.CardContent
     private(set) var playingCards: [Card]
     
     mutating func choose(_ card: Card) {
@@ -16,20 +19,23 @@ struct SetGame<CardContentShape, CardContentColor, CardContentPattern, NumberOfS
     }
     
     mutating func deal_three_cards() {
-        
-    }
-    
-    init(createCardContent: (Int) -> Card.CardContent) {
-        cardDeck = []
-        playingCards = []
-        for index in 0..<81 {
-            let content = createCardContent(index)
-            if index < 12 {
-                playingCards.append(Card(content: content, id: index))
-            } else {
-                cardDeck.append(Card(content: content, id: index))
+        if numberOfPlayingCards < totalNumberOfCards {
+            for _ in 0..<3 {
+                let content = createCardContent(numberOfPlayingCards)
+                playingCards.append(Card(content: content, id: numberOfPlayingCards))
+                numberOfPlayingCards += 1
             }
         }
+    }
+    
+    init(createCardContent: @escaping (Int) -> Card.CardContent) {
+        self.createCardContent = createCardContent
+        playingCards = []
+        for index in 0..<initialNumberOfPlayingCards {
+            let content = createCardContent(index)
+            playingCards.append(Card(content: content, id: index))
+        }
+        numberOfPlayingCards = 12
     }
     
     struct Card: Identifiable {

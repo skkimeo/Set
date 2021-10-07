@@ -18,29 +18,29 @@ struct CardView: View {
                 
             } else if card.isFaceUp {
                 cardShape.fill().foregroundColor(.white)
-                cardShape.strokeBorder(lineWidth: 2.5)
-                GeometryReader { geometry in
-                    VStack {
-                        Spacer()
-                        switch card.content.shape {
-                        case .roundedRectangle:
-                            ForEach(0..<card.content.numberOfShapes) { _ in
-                                createRoundedRectangleView(by: card.content)
-                            }
-                        case .square:
-                            ForEach(0..<card.content.numberOfShapes) { _ in
-                                createSquareView(by: card.content)
-                            }
-                        case .diamond:
-                            ForEach(0..<card.content.numberOfShapes) { _ in
-                                createDiamondView(by: card.content)
-                            }
+                cardShape.strokeBorder(lineWidth: 2)
+                //                GeometryReader { geometry in
+                VStack {
+                    Spacer()
+                    switch card.content.shape {
+                    case .roundedRectangle:
+                        ForEach(0..<card.content.numberOfShapes) { _ in
+                            createRoundedRectangleView(by: card.content)
                         }
-                        Spacer()
+                    case .square:
+                        ForEach(0..<card.content.numberOfShapes) { _ in
+                            createSquareView(by: card.content)
+                        }
+                    case .diamond:
+                        ForEach(0..<card.content.numberOfShapes) { _ in
+                            createDiamondView(by: card.content)
+                        }
                     }
-                    .padding(.horizontal)
-                    //                    }
+                    Spacer()
                 }
+                .padding(.horizontal)
+                //                    }
+                //                }
             }
             else {
                 cardShape.fill()
@@ -72,7 +72,10 @@ struct CardView: View {
         case .filled:
             symbolShape.fill().foregroundColor(symbol.color.getColor()).aspectRatio(2/1, contentMode: .fit)
         case .shaeded:
-            symbolShape.fill().foregroundColor(symbol.color.getColor()).opacity(0.5).aspectRatio(2/1, contentMode: .fit)
+            ZStack {
+                symbolShape.fill().foregroundColor(symbol.color.getColor()).opacity(0.5).aspectRatio(2/1, contentMode: .fit)
+//                symbolShape.stroke(lineWidth: 2).foregroundColor(symbol.color.getColor()).opacity(0.5).aspectRatio(2/1, contentMode: .fit)
+            }
         case .stroked:
             symbolShape.stroke(lineWidth: 2.5).foregroundColor(symbol.color.getColor()).aspectRatio(2/1, contentMode: .fit)
         }

@@ -13,11 +13,11 @@ struct SquareSetGameView: View {
     var body: some View {
         VStack {
             ScrollView {
-                AspectVGrid(items: game.cards, aspectRatio: 2/3) {
-                    CardView(card: $0)
+                AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+                    CardView(card: card)
                         .padding(5)
                         .onTapGesture {
-                            //
+                            game.choose(card)
                         }
                 }
                 .padding(.horizontal)
@@ -31,7 +31,7 @@ struct SquareSetGameView: View {
                 }
                 Spacer()
                 Button {
-                    
+                    game.dealThreeCards()
                 } label: {
                     Text("Deal 3 Cards")
                 }
