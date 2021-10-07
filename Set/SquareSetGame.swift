@@ -55,12 +55,35 @@ class SquareSetGame: ObservableObject {
         case roundedRectangle
         case diamond
         case square
+        
+        @ViewBuilder
+        func getShape() -> some View {
+            switch self {
+            case .roundedRectangle:
+                RoundedRectangle(cornerRadius: 50)
+            case .diamond:
+                Circle()
+            case .square:
+                RoundedRectangle(cornerRadius: 0)
+            }
+        }
     }
     
     enum ContentColor: CaseIterable {
         case red
         case green
         case purple
+        
+        func getColor() -> Color {
+            switch self {
+            case .red:
+                return Color.red
+            case .green:
+                return Color.green
+            case .purple:
+                return Color.purple
+            }
+        }
     }
     
     enum ContentPattern: CaseIterable {

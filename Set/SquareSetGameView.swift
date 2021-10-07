@@ -15,10 +15,13 @@ struct SquareSetGameView: View {
             ScrollView {
                 AspectVGrid(items: game.cards, aspectRatio: 2/3) {
                     CardView(card: $0)
+                        .padding(5)
                         .onTapGesture {
                             //
                         }
                 }
+                .padding(.horizontal)
+                .foregroundColor(.blue)
             }
             HStack {
                 Spacer()

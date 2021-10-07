@@ -34,7 +34,7 @@ struct SetGame<CardContentShape, CardContentColor, CardContentPattern, NumberOfS
     
     struct Card: Identifiable {
         let content: CardContent
-        let isFaceUp = false
+        let isFaceUp = true
         let isMatched = false
         let id: Int
         
