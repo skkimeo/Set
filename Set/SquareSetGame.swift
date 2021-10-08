@@ -12,25 +12,25 @@ class SquareSetGame: ObservableObject {
     
     static var cardContents: [Card.CardContent] = {
         var contents = [Card.CardContent]()
-        
-//        SMALL DECK OF CARDS
-        for shape in ContentShape.allCases {
-            for color in ContentColor.allCases {
-                for number in NumberOfContentShapes.allCases {
-                    contents.append(Card.CardContent(shape: shape, color: color, pattern: .shaded, numberOfShapes: number.rawValue))
-                }
-            }
-        }
-        
+//
+////        SMALL DECK OF CARDS
 //        for shape in ContentShape.allCases {
 //            for color in ContentColor.allCases {
-//                for pattern in ContentPattern.allCases {
-//                    for numberOfShapes in NumberOfContentShapes.allCases {
-//                        contents.append(Card.CardContent( shape: shape, color: color, pattern: pattern, numberOfShapes: numberOfShapes.rawValue))
-//                    }
+//                for number in NumberOfContentShapes.allCases {
+//                    contents.append(Card.CardContent(shape: shape, color: color, pattern: .shaded, numberOfShapes: number.rawValue))
 //                }
 //            }
 //        }
+        
+        for shape in ContentShape.allCases {
+            for color in ContentColor.allCases {
+                for pattern in ContentPattern.allCases {
+                    for numberOfShapes in NumberOfContentShapes.allCases {
+                        contents.append(Card.CardContent( shape: shape, color: color, pattern: pattern, numberOfShapes: numberOfShapes.rawValue))
+                    }
+                }
+            }
+        }
         
         return contents.shuffled()
     }()
@@ -86,7 +86,7 @@ class SquareSetGame: ObservableObject {
             case .roundedRectangle:
                 RoundedRectangle(cornerRadius: 50)
             case .diamond:
-                Circle()
+                Diamond()
             case .square:
                 RoundedRectangle(cornerRadius: 0)
             }

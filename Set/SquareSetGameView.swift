@@ -51,15 +51,15 @@ struct SquareSetGameView: View {
                 Text("New Game")
             }
             Spacer()
-            Button {
-                game.dealThreeCards()
-            } label: {
-                if game.numberOfPlayedCards < game.totalNumberOfCards {
+            if game.numberOfPlayedCards < game.totalNumberOfCards {
+                Button {
+                    game.dealThreeCards()
+                } label: {
                     Text("Deal 3 Cards")
                 }
-                else {
-                    Text("Deal 3 Cards").foregroundColor(.gray)
-                }
+            }
+            else {
+                Text("Deal 3 Cards").foregroundColor(.gray)
             }
             Spacer()
         }

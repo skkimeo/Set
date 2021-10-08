@@ -54,100 +54,39 @@ struct CardView: View {
         }
         
     }
-    
+
     @ViewBuilder
     func createSymbol(for card: SquareSetGame.Card) -> some View {
         switch card.symbol.shape {
         case .roundedRectangle:
-            createRoundedRectangleView(by: card.symbol)
+            createSymbolView(of: card.symbol, shape: RoundedRectangle(cornerRadius: 50))
         case .square:
-            createSquareView(by: card.symbol)
+            createSymbolView(of: card.symbol, shape: RoundedRectangle(cornerRadius: 0))
         case .diamond:
-            createDiamondView(by: card.symbol)
+            createSymbolView(of: card.symbol, shape: Diamond())
+        }
+    }
+    
+    @ViewBuilder
+    private func createSymbolView<SymbolShape>(of symbol: SquareSetGame.Card.CardContent, shape: SymbolShape) -> some View where SymbolShape: Shape {
+
+        switch symbol.pattern {
+        case .filled:
+            shape.fill().foregroundColor(symbol.color.getColor())
+                .aspectRatio(2/1, contentMode: .fit)
             
-        }
-    }
-    
-    @ViewBuilder
-    private func createRoundedRectangleView(by symbol: SquareSetGame.Card.CardContent) -> some View {
-        
-        let symbolShape = RoundedRectangle(cornerRadius: 60)
-
-        switch symbol.pattern {
-        case .filled:
-            symbolShape.fill().foregroundColor(symbol.color.getColor())
-                .aspectRatio(2/1, contentMode: .fit)
         case .shaded:
-            symbolShape.fill().foregroundColor(symbol.color.getColor()).opacity(0.5)
+            StripeView(shape: shape, color: symbol.color.getColor())
                 .aspectRatio(2/1, contentMode: .fit)
+            
         case .stroked:
-            symbolShape.strokeBorder(lineWidth: 2.5).foregroundColor(symbol.color.getColor())
+            shape.stroke(lineWidth: 2).foregroundColor(symbol.color.getColor())
                 .aspectRatio(2/1, contentMode: .fit)
         }
     }
     
-    
-    @ViewBuilder
-    private func createDiamondView(by symbol: SquareSetGame.Card.CardContent) -> some View {
-        
-        let symbolShape = Diamond()
-        switch symbol.pattern {
-        case .filled:
-            symbolShape.fill().foregroundColor(symbol.color.getColor())
-                .aspectRatio(2/1, contentMode: .fit)
-        case .shaded:
-            ZStack {
-                symbolShape.fill().foregroundColor(symbol.color.getColor())
-                    .opacity(0.5).aspectRatio(2/1, contentMode: .fit)
-//                symbolShape.stroke(lineWidth: 2).foregroundColor(symbol.color.getColor()).opacity(0.5).aspectRatio(2/1, contentMode: .fit)
-            }
-        case .stroked:
-            symbolShape.stroke(lineWidth: 2.5).foregroundColor(symbol.color.getColor()).aspectRatio(2/1, contentMode: .fit)
-        }
     }
 
-    @ViewBuilder
-    private func createSquareView(by symbol: SquareSetGame.Card.CardContent) -> some View {
-        
-        let symbolShape = RoundedRectangle(cornerRadius: 3)
-
-        switch symbol.pattern {
-        case .filled:
-            symbolShape.fill().foregroundColor(symbol.color.getColor())
-                .aspectRatio(2/1, contentMode: .fit)
-        case .shaded:
-            symbolShape.fill().foregroundColor(symbol.color.getColor()).opacity(0.5)
-                .aspectRatio(2/1, contentMode: .fit)
-        case .stroked:
-            symbolShape.strokeBorder(lineWidth: 2.5).foregroundColor(symbol.color.getColor())
-                .aspectRatio(2/1, contentMode: .fit)
-        }
-    }
-
-    
-}
-//
-//
-//let filledRoundedRect = RoundedRectangle(cornerRadius: 50)
-//filledRoundedRect
-//    .fill()
-//    .foregroundColor(.purple)
-//    .aspectRatio(2/1, contentMode: .fit)
-////                                .font(Font.system(size: min(geometry.size.height, geometry.size.width) ))
-//
-//let strokeRoundedRect = RoundedRectangle(cornerRadius: 50)
-//strokeRoundedRect
-//    .strokeBorder(lineWidth: 2.5)
-//    .foregroundColor(.purple)
-//    .aspectRatio(2/1, contentMode: .fit)
-//
-//let opacityRoundedRext = RoundedRectangle(cornerRadius: 50)
-//opacityRoundedRext
-//    .fill()
-//    .foregroundColor(.purple)
-//    .opacity(0.5)
-//    .aspectRatio(2/1, contentMode: .fit)
-//
 //
 //struct CardView_Previews: PreviewProvider {
 //    static var previews: some View {
