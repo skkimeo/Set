@@ -24,7 +24,7 @@ struct CardView: View {
                 }
                 //                GeometryReader { geometry in
                 VStack {
-                    switch card.content.numberOfShapes {
+                    switch card.symbol.numberOfShapes {
                     case 1: // change case to .one
                         createSymbol(for: card)
                     case 2:
@@ -49,13 +49,13 @@ struct CardView: View {
     
     @ViewBuilder
     func createSymbol(for card: SquareSetGame.Card) -> some View {
-        switch card.content.shape {
+        switch card.symbol.shape {
         case .roundedRectangle:
-            createRoundedRectangleView(by: card.content)
+            createRoundedRectangleView(by: card.symbol)
         case .square:
-            createSquareView(by: card.content)
+            createSquareView(by: card.symbol)
         case .diamond:
-            createDiamondView(by: card.content)
+            createDiamondView(by: card.symbol)
             
         }
     }

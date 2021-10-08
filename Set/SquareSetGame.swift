@@ -22,7 +22,7 @@ class SquareSetGame: ObservableObject {
                 }
             }
         }
-        return contents.shuffled()
+        return contents //.shuffled()
     }()
     
     static private func createSetGame() -> SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> {
@@ -53,7 +53,7 @@ class SquareSetGame: ObservableObject {
     }
     
     
-    enum ContentShape: CaseIterable {
+    enum ContentShape: CaseIterable, Hashable {
         case roundedRectangle
         case diamond
         case square
@@ -71,7 +71,7 @@ class SquareSetGame: ObservableObject {
         }
     }
     
-    enum ContentColor: CaseIterable {
+    enum ContentColor: CaseIterable, Hashable {
         case red
         case green
         case purple
@@ -88,13 +88,13 @@ class SquareSetGame: ObservableObject {
         }
     }
     
-    enum ContentPattern: CaseIterable {
+    enum ContentPattern: CaseIterable, Hashable {
         case filled
         case stroked
         case shaded
     }
     
-    enum NumberOfContentShapes: Int, CaseIterable {
+    enum NumberOfContentShapes: Int, CaseIterable, Hashable {
         case one = 1
         case two
         case three
