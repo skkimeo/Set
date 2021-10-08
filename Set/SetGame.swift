@@ -13,8 +13,8 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private var chosenCards = [Card]()
     private(set) var isEndOfGame = false
     
-    let totalNumberOfCards = 81
-    private let initialNumberOfPlayingCards = 12
+    let totalNumberOfCards: Int
+    private let initialNumberOfPlayingCards: Int
     
     private let createCardSymbol: (Int) -> Card.CardContent
     private(set) var playingCards: [Card]
@@ -168,7 +168,9 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
     }
     
-    init(createCardContent: @escaping (Int) -> Card.CardContent) {
+    init(initialNumberOfPlayingCards: Int, totalNumberOfCards: Int, createCardContent: @escaping (Int) -> Card.CardContent) {
+        self.initialNumberOfPlayingCards = initialNumberOfPlayingCards
+        self.totalNumberOfCards = totalNumberOfCards
         self.createCardSymbol = createCardContent
         playingCards = []
         for _ in 0..<initialNumberOfPlayingCards {

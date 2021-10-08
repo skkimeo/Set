@@ -11,28 +11,34 @@ struct SquareSetGameView: View {
     @ObservedObject var game: SquareSetGame
     
     var body: some View {
-        VStack {
-            if game.isEndOfGame {
-                Text("Game Over!")
-                    .foregroundColor(.green).font(.largeTitle)
-            }
-            AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-                CardView(card: card)
-                    .padding(5)
-                    .onTapGesture {
-                        game.choose(card)
+        NavigationView {
+            VStack {
+                ZStack{
+                    if !game.isEndOfGame {
+                        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+                            CardView(card: card)
+                                .padding(5)
+                                .onTapGesture {
+                                    game.choose(card)
+                                }
+                            
+                        }
+                        
                     }
-                
-                
-            }
-            .padding(.horizontal)
-            .foregroundColor(.blue)
-            HStack {
-                Spacer()
-                Button {
-                    game.newGame()
-                } label: {
-                    Text("New Game")
+                    if game.isEndOfGame {
+                        Text("Game Over!")
+                            .foregroundColor(.green).font(.largeTitle)
+                    }
+                    
+                }
+                .padding(.horizontal)
+                .foregroundColor(.blue)
+                HStack {
+                    Spacer()
+                    Button {
+                        game.newGame()
+                    } label: {
+                        Text("New Game")
                 }
                 Spacer()
                 if game.numberOfPlayedCards < game.totalNumberOfCards {
@@ -49,6 +55,7 @@ struct SquareSetGameView: View {
             }
             .padding()
             
+        }.navigationBarTitle("Set!")
         }
     }
 }
