@@ -78,7 +78,7 @@ class SquareSetGame: ObservableObject {
     enum ContentShape: CaseIterable {
         case roundedRectangle
         case diamond
-        case square
+        case squiggle
         
         @ViewBuilder
         func getShape() -> some View {
@@ -87,7 +87,7 @@ class SquareSetGame: ObservableObject {
                 RoundedRectangle(cornerRadius: 50)
             case .diamond:
                 Diamond()
-            case .square:
+            case .squiggle:
                 RoundedRectangle(cornerRadius: 0)
             }
         }

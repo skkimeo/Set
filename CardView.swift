@@ -60,8 +60,9 @@ struct CardView: View {
         switch card.symbol.shape {
         case .roundedRectangle:
             createSymbolView(of: card.symbol, shape: RoundedRectangle(cornerRadius: 50))
-        case .square:
-            createSymbolView(of: card.symbol, shape: RoundedRectangle(cornerRadius: 0))
+        case .squiggle:
+            createSymbolView(of: card.symbol, shape:
+                             Squiggle())
         case .diamond:
             createSymbolView(of: card.symbol, shape: Diamond())
         }

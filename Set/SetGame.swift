@@ -14,7 +14,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private(set) var isEndOfGame = false
     
     let totalNumberOfCards = 81
-    private let initialNumberOfPlayingCards = 81
+    private let initialNumberOfPlayingCards = 12
     
     private let createCardSymbol: (Int) -> Card.CardContent
     private(set) var playingCards: [Card]

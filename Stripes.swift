@@ -36,11 +36,3 @@ struct StripeView<SymbolShape>: View where SymbolShape: Shape {
         
     }
 }
-
-struct WaveShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.addEllipse(in: rect)
-        return path
-    }
-}

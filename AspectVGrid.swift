@@ -20,19 +20,18 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
     
     var body: some View {
         GeometryReader { geometry in
-            VStack{
-                Text("\(geometry.size.width)")
-//                Text("\")
-                let width: CGFloat = widthThatFits(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio)
-                LazyVGrid(columns: [adaptiveGridItem(width: width)], spacing: 0) {
-                    ForEach(items) {
-                        content($0)
-                            .aspectRatio(aspectRatio, contentMode: .fit)
+            ScrollView{
+                VStack{
+                    let width: CGFloat = widthThatFits(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio)
+                    LazyVGrid(columns: [adaptiveGridItem(width: width)], spacing: 0) {
+                        ForEach(items) {
+                            content($0)
+                                .aspectRatio(aspectRatio, contentMode: .fit)
+                        }
                     }
+                    Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
                 }
-                Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
             }
-            Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
         }
     }
     

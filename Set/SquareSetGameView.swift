@@ -16,55 +16,40 @@ struct SquareSetGameView: View {
                 Text("Game Over!")
                     .foregroundColor(.green).font(.largeTitle)
             }
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-                    ForEach(game.cards) { card in
-                        CardView(card: card)
-                            .padding(5)
-                            .onTapGesture {
-                                game.choose(card)
-                            }
-                            .aspectRatio(2/3, contentMode: .fit)
+            AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+                CardView(card: card)
+                    .padding(5)
+                    .onTapGesture {
+                        game.choose(card)
+                    }
+                
+                
+            }
+            .padding(.horizontal)
+            .foregroundColor(.blue)
+            HStack {
+                Spacer()
+                Button {
+                    game.newGame()
+                } label: {
+                    Text("New Game")
+                }
+                Spacer()
+                if game.numberOfPlayedCards < game.totalNumberOfCards {
+                    Button {
+                        game.dealThreeCards()
+                    } label: {
+                        Text("Deal 3 Cards")
                     }
                 }
-            }
-            
-            
-            
-        }
-        .padding(.horizontal)
-        .foregroundColor(.blue)
-        //                AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-        //                    CardView(card: card)
-        //                        .padding(5)
-        //                        .onTapGesture {
-        //                            game.choose(card)
-        //                        }
-        //                }
-        //                .padding(.horizontal)
-        //                .foregroundColor(.blue)
-        HStack {
-            Spacer()
-            Button {
-                game.newGame()
-            } label: {
-                Text("New Game")
-            }
-            Spacer()
-            if game.numberOfPlayedCards < game.totalNumberOfCards {
-                Button {
-                    game.dealThreeCards()
-                } label: {
-                    Text("Deal 3 Cards")
+                else {
+                    Text("Deal 3 Cards").foregroundColor(.gray)
                 }
+                Spacer()
             }
-            else {
-                Text("Deal 3 Cards").foregroundColor(.gray)
-            }
-            Spacer()
+            .padding()
+            
         }
-        .padding()
-        
     }
 }
 
