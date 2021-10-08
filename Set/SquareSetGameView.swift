@@ -36,7 +36,7 @@ struct SquareSetGameView: View {
 //                .padding(.horizontal)
 //                .foregroundColor(.blue)
             HStack {
-//                Spacer()
+                Spacer()
                 Button {
                     game.newGame()
                 } label: {
@@ -46,9 +46,14 @@ struct SquareSetGameView: View {
                 Button {
                     game.dealThreeCards()
                 } label: {
-                    Text("Deal 3 Cards")
+                    if game.numberOfPlayedCards < game.totalNumberOfCards {
+                        Text("Deal 3 Cards")
+                    }
+                    else {
+                        Text("Deal 3 Cards").foregroundColor(.gray)
+                    }
                 }
-//                Spacer()
+                Spacer()
             }
             .padding()
             

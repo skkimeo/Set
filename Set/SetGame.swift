@@ -8,11 +8,11 @@
 import Foundation
 
 struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes> where CardSymbolShape: Hashable, CardSymbolColor: Hashable, CardSymbolPattern: Hashable {
-    private var numberOfPlayingCards = 0
+    private(set) var numberOfPlayedCards = 0
     private var numberOfChosenCards = 0
     private var chosenCards = [Card]()
     
-    private let totalNumberOfCards = 81
+    let totalNumberOfCards = 81
     private let initialNumberOfPlayingCards = 12
     
     private let createCardSymbol: (Int) -> Card.CardContent
@@ -25,8 +25,8 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 chosenCards.forEach { card in
                     let matchedIndex = playingCards.firstIndex(of: card)!
                     playingCards.remove(at: matchedIndex)
+                    deal_a_card(at: matchedIndex)
                 }
-                deal_three_cards()
             }
             else {
                 chosenCards.forEach { card in
@@ -87,15 +87,39 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         return true
     }
     
-    mutating func deal_three_cards() {
-        if numberOfPlayingCards < totalNumberOfCards {
-            if findSet() {
-                
+    mutating func deal_a_card(at index: Int) {
+        if numberOfPlayedCards < totalNumberOfCards {
+            let symbol = createCardSymbol(numberOfPlayedCards)
+            playingCards.insert(Card(symbol: symbol, id: numberOfPlayedCards), at: index)
+            numberOfPlayedCards += 1
+        }
+    }
+    
+    mutating func dealThreeCards() {
+        if chosenCards.count == 3 {
+            let chosenCard = playingCards.first(where: {$0 == chosenCards.first})!
+            if chosenCard.isMatched {
+                chosenCards.forEach { card in
+                    let matchedIndex = playingCards.firstIndex(of: card)!
+                    playingCards.remove(at: matchedIndex)
+                    deal_a_card(at: matchedIndex)
+                }
+            } else {
+                chosenCards.forEach { card in
+                    let failedMatchIndex = playingCards.firstIndex(of: card)!
+                    playingCards[failedMatchIndex].isChosen = false
+                    playingCards[failedMatchIndex].isNotMatched = false
+                    
+                }
+                for _ in 0..<3 {
+                    deal_a_card(at: playingCards.endIndex)
+                }
             }
+            chosenCards = []
+
+        } else {
             for _ in 0..<3 {
-                let content = createCardSymbol(numberOfPlayingCards)
-                playingCards.append(Card(symbol: content, id: numberOfPlayingCards))
-                numberOfPlayingCards += 1
+                deal_a_card(at: playingCards.endIndex)
             }
         }
     }
@@ -104,9 +128,9 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         self.createCardSymbol = createCardContent
         playingCards = []
         for _ in 0..<initialNumberOfPlayingCards {
-            let content = createCardContent(numberOfPlayingCards)
-            playingCards.append(Card(symbol: content, id: numberOfPlayingCards))
-            numberOfPlayingCards += 1
+            let content = createCardContent(numberOfPlayedCards)
+            playingCards.append(Card(symbol: content, id: numberOfPlayedCards))
+            numberOfPlayedCards += 1
         }
     }
     

@@ -42,7 +42,7 @@ struct CardView: View {
                 .padding(.horizontal)
                 
                 if card.isNotMatched {
-                    cardShape.foregroundColor(.gray).opacity(0.2)
+                    cardShape.foregroundColor(.gray).opacity(0.1)
                     cardShape.strokeBorder(lineWidth: 3).foregroundColor(.gray)
                 }
                 //                    }
