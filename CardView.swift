@@ -14,7 +14,8 @@ struct CardView: View {
         ZStack {
             let cardShape = RoundedRectangle(cornerRadius: 10)
             if card.isMatched {
-                cardShape.opacity(0)
+                cardShape.foregroundColor(.green).opacity(0.1)
+                cardShape.strokeBorder(lineWidth:3).foregroundColor(.green)
                 
             } else {
                 cardShape.fill().foregroundColor(.white)
@@ -39,6 +40,11 @@ struct CardView: View {
                     }
                 }
                 .padding(.horizontal)
+                
+                if card.isNotMatched {
+                    cardShape.foregroundColor(.gray).opacity(0.2)
+                    cardShape.strokeBorder(lineWidth: 3).foregroundColor(.gray)
+                }
                 //                    }
                 //                }
             }

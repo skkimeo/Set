@@ -19,43 +19,53 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private(set) var playingCards: [Card]
     
     mutating func choose(_ card: Card) {
-            switch chosenCards.count {
-            case 3:
-                // 기존 3개가 매칭인지 확인해야함
-                if findSet() {
-                    chosenCards.forEach { chosenCard in
-                        let matchedIndex = playingCards.firstIndex(of: chosenCard)!
-                        playingCards[matchedIndex].isMatched = true
-//                        playingCards[matchedIndex].isChosen = false
-                        playingCards.remove(at: matchedIndex)
-//                        playingCards[$0].isChosen = false
-                    }
-                    deal_three_cards() // replace exact same place?
+        if chosenCards.count == 3 {
+            if findSet() { // think of way to simplify
+                // erase those in set
+                chosenCards.forEach { card in
+                    let matchedIndex = playingCards.firstIndex(of: card)!
+                    playingCards.remove(at: matchedIndex)
                 }
-                else {
-                    chosenCards.forEach {chosenCard in
-                        let matchedIndex = playingCards.firstIndex(of: chosenCard)!
-                        playingCards[matchedIndex].isChosen = false
-                    }
-                }
-                chosenCards = []
-                if let chosenIndex = playingCards.firstIndex(where: {$0.id == card.id}) {
-                    playingCards[chosenIndex].isChosen = true
-                    chosenCards.append(playingCards[chosenIndex])
-                }
-            default:
-                if let chosenIndex = playingCards.firstIndex(where: {$0.id == card.id}) {
-                if !playingCards[chosenIndex].isChosen {
-                    playingCards[chosenIndex].isChosen = true
-                    chosenCards.append(playingCards[chosenIndex])
-                    
-                } else {  // diselect
-                    playingCards[chosenIndex].isChosen = false
-                    chosenCards.remove(at: chosenCards.firstIndex(of: playingCards[chosenIndex])!)
+                deal_three_cards()
+            }
+            else {
+                chosenCards.forEach { card in
+                    let failedMatchIndex = playingCards.firstIndex(of: card)!
+                    playingCards[failedMatchIndex].isChosen = false
+                    playingCards[failedMatchIndex].isNotMatched = false
                 }
             }
+            chosenCards = []
         }
+        //        else { //
+        if let chosenIndex = playingCards.firstIndex(where: { $0.id == card.id }) {
+            if !playingCards[chosenIndex].isChosen {
+                playingCards[chosenIndex].isChosen = true
+                chosenCards.append(playingCards[chosenIndex])
+                
+                if chosenCards.count == 3 {
+                    if findSet() {
+                        chosenCards.forEach { card in
+                            let index = playingCards.firstIndex(of: card)!
+                            playingCards[index].isMatched = true
+                        }
+                    } else {
+                        chosenCards.forEach { card in
+                            let index = playingCards.firstIndex(of: card)!
+                            playingCards[index].isNotMatched = true
+                        }
+                    }
+                }
+            } else { // diselect
+                playingCards[chosenIndex].isChosen = false
+                chosenCards.remove(at: chosenCards.firstIndex(of: playingCards[chosenIndex])!)
+                
+            }
+        }
+        
+        //        }
     }
+                 
     
     mutating func findSet() -> Bool {
         var shapes = Set<CardSymbolShape>()
@@ -79,6 +89,9 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     
     mutating func deal_three_cards() {
         if numberOfPlayingCards < totalNumberOfCards {
+            if findSet() {
+                
+            }
             for _ in 0..<3 {
                 let content = createCardSymbol(numberOfPlayingCards)
                 playingCards.append(Card(symbol: content, id: numberOfPlayingCards))
@@ -99,8 +112,9 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     
     struct Card: Identifiable, Equatable {
         let symbol: CardContent
-        var isChosen = false
+        var isChosen: Bool = false
         var isMatched = false
+        var isNotMatched = false
         let id: Int
         
         struct CardContent {
