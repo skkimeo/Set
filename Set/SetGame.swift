@@ -8,22 +8,44 @@
 import Foundation
 
 struct SetGame<CardContentShape, CardContentColor, CardContentPattern, NumberOfShapes>{
-    private var numberOfPlayingCards: Int
-    private var numberOfChosenCards: Int
+    private var numberOfPlayingCards = 0
+    private var numberOfChosenCards = 0
+    private var chosenCards = [Int]()
     
     private let totalNumberOfCards = 81
-    private let initialNumberOfPlayingCards = 81
+    private let initialNumberOfPlayingCards = 3
     
     private let createCardContent: (Int) -> Card.CardContent
     private(set) var playingCards: [Card]
     
     mutating func choose(_ card: Card) {
-        if !card.isChosen {
+        if let chosenIndex = playingCards.firstIndex(where: {$0.id == card.id}) {
+            switch chosenCards.count {
+            case 3:
+                // 기존 3개가 매칭인지 확인해야함
+                if !playingCards[chosenIndex].isChosen {
+                    // match checking method
+                    chosenCards.forEach {
+                        playingCards.remove(at: $0)
+                    }
+                    chosenCards = []
+                    playingCards[chosenIndex].isChosen = true
+                    chosenCards.append(chosenIndex)
+                }
+                
+            default:
+                if !playingCards[chosenIndex].isChosen {
+                    playingCards[chosenIndex].isChosen = true
+                    chosenCards.append(chosenIndex)
+                    
+                } else {  // diselect
+                    playingCards[chosenIndex].isChosen = false
+                    chosenCards.remove(at: chosenCards.firstIndex(of: chosenIndex)!)
+                }
+            }
             
         }
-        
     }
-    
     mutating func deal_three_cards() {
         if numberOfPlayingCards < totalNumberOfCards {
             for _ in 0..<3 {
@@ -37,16 +59,16 @@ struct SetGame<CardContentShape, CardContentColor, CardContentPattern, NumberOfS
     init(createCardContent: @escaping (Int) -> Card.CardContent) {
         self.createCardContent = createCardContent
         playingCards = []
-        for index in 0..<initialNumberOfPlayingCards {
-            let content = createCardContent(index)
-            playingCards.append(Card(content: content, id: index))
+        for _ in 0..<initialNumberOfPlayingCards {
+            let content = createCardContent(numberOfPlayingCards)
+            playingCards.append(Card(content: content, id: numberOfPlayingCards))
+            numberOfPlayingCards += 1
         }
-        numberOfPlayingCards = 81
     }
     
     struct Card: Identifiable {
         let content: CardContent
-        var isChosen = true
+        var isChosen = false
         var isMatched = false
         let id: Int
         

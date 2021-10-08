@@ -20,7 +20,7 @@ struct CardView: View {
                 cardShape.fill().foregroundColor(.white)
                 cardShape.strokeBorder(lineWidth: 2)
                 if card.isChosen {
-                    cardShape.strokeBorder(lineWidth: 3)
+                    cardShape.strokeBorder(lineWidth: 3).foregroundColor(.orange)
                 }
                 //                GeometryReader { geometry in
                 VStack {

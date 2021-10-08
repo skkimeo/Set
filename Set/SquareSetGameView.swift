@@ -21,9 +21,7 @@ struct SquareSetGameView: View {
                                 game.choose(card)
                             }
                             .aspectRatio(2/3, contentMode: .fit)
-                        
                     }
-                    
                 }
             }
             .padding(.horizontal)
