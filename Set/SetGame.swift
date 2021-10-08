@@ -13,8 +13,8 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private var chosenCards = [Card]()
     private(set) var isEndOfGame = false
     
-    let totalNumberOfCards = 81
-    private let initialNumberOfPlayingCards = 12
+    let totalNumberOfCards = 27
+    private let initialNumberOfPlayingCards = 27
     
     private let createCardSymbol: (Int) -> Card.CardContent
     private(set) var playingCards: [Card]
@@ -23,6 +23,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         if isEndOfGame {
             return
         }
+                
         if chosenCards.count == 3 {
             if playingCards.first(where: {$0 == chosenCards.first})!.isMatched { // think of way to simplify
                 // erase those in set
@@ -31,6 +32,13 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     playingCards.remove(at: matchedIndex)
                     deal_a_card(at: matchedIndex)
                 }
+                
+//                if numberOfPlayedCards == totalNumberOfCards {
+//                    if checkIfEndOfGame(in: playingCards) {
+//                        isEndOfGame = true
+//                        return
+//                    }
+//                }
             }
             else {
                 chosenCards.forEach { card in
@@ -48,15 +56,22 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 chosenCards.append(playingCards[chosenIndex])
                 
                 if chosenCards.count == 3 {
-                    if findSet(in: chosenCards) {
+                    if findSet(of: chosenCards) {
                         chosenCards.forEach { card in
                             let index = playingCards.firstIndex(of: card)!
                             playingCards[index].isMatched = true
                         }
-                        if numberOfPlayedCards == totalNumberOfCards && checkIfEndOfGame(in: playingCards) {
-                            isEndOfGame = true
-                            print("hi")
-                            return
+                        
+                        if numberOfPlayedCards == totalNumberOfCards {
+                            var dupPlayingCards = playingCards
+                            chosenCards.forEach { card in
+                                let matchedIndex = dupPlayingCards.firstIndex(of: card)!
+                                dupPlayingCards.remove(at: matchedIndex)
+                            }
+                            
+                            if dupPlayingCards.isEmpty || checkIfEndOfGame(in: dupPlayingCards) {
+                                isEndOfGame = true
+                            }
                         }
                 
                     } else {
@@ -69,7 +84,6 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             } else { // diselect
                 playingCards[chosenIndex].isChosen = false
                 chosenCards.remove(at: chosenCards.firstIndex(of: playingCards[chosenIndex])!)
-                
             }
             
         }
@@ -82,7 +96,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         for i in 0..<cards.count - 2 {
             for j in (i + 1)..<cards.count - 1 {
                 for k in (j + 1)..<cards.count {
-                    if findSet(in: [playingCards[i], playingCards[j], playingCards[k]]) {
+                    if findSet(of: [cards[i], cards[j], cards[k]]) {
                         return false
                     }
                 }
@@ -92,7 +106,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     }
                  
     
-    mutating func findSet(in cards: [Card]) -> Bool {
+    mutating func findSet(of cards: [Card]) -> Bool {
         var shapes = Set<CardSymbolShape>()
         var colors = Set<CardSymbolColor>()
         var patterns = Set<CardSymbolPattern>()
@@ -144,6 +158,12 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         } else {
             for _ in 0..<3 {
                 deal_a_card(at: playingCards.endIndex)
+            }
+        }
+        
+        if numberOfPlayedCards == totalNumberOfCards {
+            if checkIfEndOfGame(in: playingCards) {
+                isEndOfGame = true
             }
         }
     }
