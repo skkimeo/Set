@@ -11,6 +11,7 @@ struct SquareSetGameView: View {
     @ObservedObject var game: SquareSetGame
     
     var body: some View {
+<<<<<<< HEAD
         NavigationView {
             VStack {
                 VStack{
@@ -28,17 +29,30 @@ struct SquareSetGameView: View {
                     if game.isEndOfGame {
                         Text("Game Over!")
                             .foregroundColor(.green).font(.largeTitle)
+=======
+        VStack {
+            if game.isEndOfGame {
+                Text("Game Over!")
+                    .foregroundColor(.green).font(.largeTitle)
+            }
+            AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+                CardView(card: card)
+                    .padding(5)
+                    .onTapGesture {
+                        game.choose(card)
+>>>>>>> parent of 55733c0 (added "NavigationView")
                     }
-                    
-                }
-                .padding(.horizontal)
-                .foregroundColor(.blue)
-                HStack {
-                    Spacer()
-                    Button {
-                        game.newGame()
-                    } label: {
-                        Text("New Game")
+                
+                
+            }
+            .padding(.horizontal)
+            .foregroundColor(.blue)
+            HStack {
+                Spacer()
+                Button {
+                    game.newGame()
+                } label: {
+                    Text("New Game")
                 }
                 Spacer()
                 if game.numberOfPlayedCards < game.totalNumberOfCards {
@@ -55,7 +69,10 @@ struct SquareSetGameView: View {
             }
             .padding()
             
+<<<<<<< HEAD
         }.navigationBarTitle("Sun-Set!")
+=======
+>>>>>>> parent of 55733c0 (added "NavigationView")
         }
     }
 }
