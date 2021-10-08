@@ -16,7 +16,7 @@ struct SquareSetGameView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
                     ForEach(game.cards) { card in
                         CardView(card: card)
-                            .padding(2)
+                            .padding(5)
                             .onTapGesture {
                                 game.choose(card)
                             }

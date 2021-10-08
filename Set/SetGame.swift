@@ -9,15 +9,16 @@ import Foundation
 
 struct SetGame<CardContentShape, CardContentColor, CardContentPattern, NumberOfShapes>{
     private var numberOfPlayingCards: Int
+    private var numberOfChosenCards: Int
+    
     private let totalNumberOfCards = 81
     private let initialNumberOfPlayingCards = 81
+    
     private let createCardContent: (Int) -> Card.CardContent
     private(set) var playingCards: [Card]
     
-    private var id = [Int]()
-    
     mutating func choose(_ card: Card) {
-        if !card.isFaceUp {
+        if !card.isChosen {
             
         }
         
@@ -45,7 +46,7 @@ struct SetGame<CardContentShape, CardContentColor, CardContentPattern, NumberOfS
     
     struct Card: Identifiable {
         let content: CardContent
-        var isFaceUp = true
+        var isChosen = true
         var isMatched = false
         let id: Int
         

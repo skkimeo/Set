@@ -91,7 +91,7 @@ class SquareSetGame: ObservableObject {
     enum ContentPattern: CaseIterable {
         case filled
         case stroked
-        case shaeded
+        case shaded
     }
     
     enum NumberOfContentShapes: Int, CaseIterable {

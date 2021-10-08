@@ -16,37 +16,48 @@ struct CardView: View {
             if card.isMatched {
                 cardShape.opacity(0)
                 
-            } else if card.isFaceUp {
+            } else {
                 cardShape.fill().foregroundColor(.white)
                 cardShape.strokeBorder(lineWidth: 2)
+                if card.isChosen {
+                    cardShape.strokeBorder(lineWidth: 3)
+                }
                 //                GeometryReader { geometry in
                 VStack {
-                    Spacer()
-                    switch card.content.shape {
-                    case .roundedRectangle:
-                        ForEach(0..<card.content.numberOfShapes) { _ in
-                            createRoundedRectangleView(by: card.content)
-                        }
-                    case .square:
-                        ForEach(0..<card.content.numberOfShapes) { _ in
-                            createSquareView(by: card.content)
-                        }
-                    case .diamond:
-                        ForEach(0..<card.content.numberOfShapes) { _ in
-                            createDiamondView(by: card.content)
-                        }
+                    switch card.content.numberOfShapes {
+                    case 1: // change case to .one
+                        createSymbol(for: card)
+                    case 2:
+                        createSymbol(for: card)
+                        createSymbol(for: card)
+                    case 3:
+                        createSymbol(for: card)
+                        createSymbol(for: card)
+                        createSymbol(for: card)
+                    default:
+                        createSymbol(for: card)
                     }
-                    Spacer()
                 }
                 .padding(.horizontal)
                 //                    }
                 //                }
             }
-            else {
-                cardShape.fill()
-            }
+            
         }
         
+    }
+    
+    @ViewBuilder
+    func createSymbol(for card: SquareSetGame.Card) -> some View {
+        switch card.content.shape {
+        case .roundedRectangle:
+            createRoundedRectangleView(by: card.content)
+        case .square:
+            createSquareView(by: card.content)
+        case .diamond:
+            createDiamondView(by: card.content)
+            
+        }
     }
     
     @ViewBuilder
@@ -56,13 +67,17 @@ struct CardView: View {
 
         switch symbol.pattern {
         case .filled:
-            symbolShape.fill().foregroundColor(symbol.color.getColor()).aspectRatio(2/1, contentMode: .fit)
-        case .shaeded:
-            symbolShape.fill().foregroundColor(symbol.color.getColor()).opacity(0.5).aspectRatio(2/1, contentMode: .fit)
+            symbolShape.fill().foregroundColor(symbol.color.getColor())
+                .aspectRatio(2/1, contentMode: .fit)
+        case .shaded:
+            symbolShape.fill().foregroundColor(symbol.color.getColor()).opacity(0.5)
+                .aspectRatio(2/1, contentMode: .fit)
         case .stroked:
-            symbolShape.strokeBorder(lineWidth: 2.5).foregroundColor(symbol.color.getColor()).aspectRatio(2/1, contentMode: .fit)
+            symbolShape.strokeBorder(lineWidth: 2.5).foregroundColor(symbol.color.getColor())
+                .aspectRatio(2/1, contentMode: .fit)
         }
     }
+    
     
     @ViewBuilder
     private func createDiamondView(by symbol: SquareSetGame.Card.CardContent) -> some View {
@@ -70,10 +85,12 @@ struct CardView: View {
         let symbolShape = Diamond()
         switch symbol.pattern {
         case .filled:
-            symbolShape.fill().foregroundColor(symbol.color.getColor()).aspectRatio(2/1, contentMode: .fit)
-        case .shaeded:
+            symbolShape.fill().foregroundColor(symbol.color.getColor())
+                .aspectRatio(2/1, contentMode: .fit)
+        case .shaded:
             ZStack {
-                symbolShape.fill().foregroundColor(symbol.color.getColor()).opacity(0.5).aspectRatio(2/1, contentMode: .fit)
+                symbolShape.fill().foregroundColor(symbol.color.getColor())
+                    .opacity(0.5).aspectRatio(2/1, contentMode: .fit)
 //                symbolShape.stroke(lineWidth: 2).foregroundColor(symbol.color.getColor()).opacity(0.5).aspectRatio(2/1, contentMode: .fit)
             }
         case .stroked:
@@ -88,11 +105,14 @@ struct CardView: View {
 
         switch symbol.pattern {
         case .filled:
-            symbolShape.fill().foregroundColor(symbol.color.getColor()).aspectRatio(2/1, contentMode: .fit)
-        case .shaeded:
-            symbolShape.fill().foregroundColor(symbol.color.getColor()).opacity(0.5).aspectRatio(2/1, contentMode: .fit)
+            symbolShape.fill().foregroundColor(symbol.color.getColor())
+                .aspectRatio(2/1, contentMode: .fit)
+        case .shaded:
+            symbolShape.fill().foregroundColor(symbol.color.getColor()).opacity(0.5)
+                .aspectRatio(2/1, contentMode: .fit)
         case .stroked:
-            symbolShape.strokeBorder(lineWidth: 2.5).foregroundColor(symbol.color.getColor()).aspectRatio(2/1, contentMode: .fit)
+            symbolShape.strokeBorder(lineWidth: 2.5).foregroundColor(symbol.color.getColor())
+                .aspectRatio(2/1, contentMode: .fit)
         }
     }
 
