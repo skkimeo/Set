@@ -11,6 +11,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private(set) var numberOfPlayedCards = 0
     private var numberOfChosenCards = 0
     private var chosenCards = [Card]()
+    private(set) var isEndOfGame = false
     
     let totalNumberOfCards = 81
     private let initialNumberOfPlayingCards = 12
@@ -19,8 +20,11 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private(set) var playingCards: [Card]
     
     mutating func choose(_ card: Card) {
+        if isEndOfGame {
+            return
+        }
         if chosenCards.count == 3 {
-            if findSet() { // think of way to simplify
+            if playingCards.first(where: {$0 == chosenCards.first})!.isMatched { // think of way to simplify
                 // erase those in set
                 chosenCards.forEach { card in
                     let matchedIndex = playingCards.firstIndex(of: card)!
@@ -44,11 +48,17 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 chosenCards.append(playingCards[chosenIndex])
                 
                 if chosenCards.count == 3 {
-                    if findSet() {
+                    if findSet(in: chosenCards) {
                         chosenCards.forEach { card in
                             let index = playingCards.firstIndex(of: card)!
                             playingCards[index].isMatched = true
                         }
+                        if numberOfPlayedCards == totalNumberOfCards && checkIfEndOfGame(in: playingCards) {
+                            isEndOfGame = true
+                            print("hi")
+                            return
+                        }
+                
                     } else {
                         chosenCards.forEach { card in
                             let index = playingCards.firstIndex(of: card)!
@@ -61,19 +71,34 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 chosenCards.remove(at: chosenCards.firstIndex(of: playingCards[chosenIndex])!)
                 
             }
+            
         }
         
         //        }
     }
+    
+    mutating func checkIfEndOfGame(in cards: [Card]) -> Bool {
+        
+        for i in 0..<cards.count - 2 {
+            for j in (i + 1)..<cards.count - 1 {
+                for k in (j + 1)..<cards.count {
+                    if findSet(in: [playingCards[i], playingCards[j], playingCards[k]]) {
+                        return false
+                    }
+                }
+            }
+        }
+        return true
+    }
                  
     
-    mutating func findSet() -> Bool {
+    mutating func findSet(in cards: [Card]) -> Bool {
         var shapes = Set<CardSymbolShape>()
         var colors = Set<CardSymbolColor>()
         var patterns = Set<CardSymbolPattern>()
         var numberOfShapes = Set<Int>()
         
-        chosenCards.forEach { card in
+        cards.forEach { card in
             shapes.insert(card.symbol.shape)
             colors.insert(card.symbol.color)
             patterns.insert(card.symbol.pattern)
@@ -109,7 +134,6 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     let failedMatchIndex = playingCards.firstIndex(of: card)!
                     playingCards[failedMatchIndex].isChosen = false
                     playingCards[failedMatchIndex].isNotMatched = false
-                    
                 }
                 for _ in 0..<3 {
                     deal_a_card(at: playingCards.endIndex)
@@ -151,7 +175,6 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         static func == (lhs: SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes>.Card, rhs: SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes>.Card) -> Bool {
             lhs.id == rhs.id
         }
-        
     }
 }
 

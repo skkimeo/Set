@@ -44,6 +44,10 @@ class SquareSetGame: ObservableObject {
         model.totalNumberOfCards
     }
     
+    var isEndOfGame: Bool {
+        model.isEndOfGame
+    }
+    
     // MARK: -Intent(s)
     
     func choose(_ card: Card) {

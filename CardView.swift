@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CardView: View {
     let card: SquareSetGame.Card
+//    let isEndOfGame: Boo
     
     var body: some View {
         ZStack {
@@ -16,6 +17,7 @@ struct CardView: View {
             if card.isMatched {
                 cardShape.foregroundColor(.green).opacity(0.1)
                 cardShape.strokeBorder(lineWidth:3).foregroundColor(.green)
+//                if
                 
             } else {
                 cardShape.fill().foregroundColor(.white)
