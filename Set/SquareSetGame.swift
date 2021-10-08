@@ -12,32 +12,32 @@ class SquareSetGame: ObservableObject {
     
     static var cardContents: [Card.CardContent] = {
         var contents = [Card.CardContent]()
-//
-////        SMALL DECK OF CARDS
+////
+//////        SMALL DECK OF CARDS
+//        for shape in ContentShape.allCases {
+//            for color in ContentColor.allCases {
+////                for number in NumberOfContentShapes.allCases {
+//                    contents.append(Card.CardContent(shape: shape, color: color, pattern: .stroked, numberOfShapes: 1))
+////                }
+//            }
+//        }
+
         for shape in ContentShape.allCases {
             for color in ContentColor.allCases {
-                for number in NumberOfContentShapes.allCases {
-                    contents.append(Card.CardContent(shape: shape, color: color, pattern: .stroked, numberOfShapes: number.rawValue))
+                for pattern in ContentPattern.allCases {
+                    for numberOfShapes in NumberOfContentShapes.allCases {
+                        contents.append(Card.CardContent( shape: shape, color: color, pattern: pattern, numberOfShapes: numberOfShapes.rawValue))
+                    }
                 }
             }
         }
-//
-//        for shape in ContentShape.allCases {
-//            for color in ContentColor.allCases {
-//                for pattern in ContentPattern.allCases {
-//                    for numberOfShapes in NumberOfContentShapes.allCases {
-//                        contents.append(Card.CardContent( shape: shape, color: color, pattern: pattern, numberOfShapes: numberOfShapes.rawValue))
-//                    }
-//                }
-//            }
-//        }
         
         return contents.shuffled()
     }()
     
     
     static private func createSetGame() -> SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> {
-        SetGame(initialNumberOfPlayingCards: 12, totalNumberOfCards: cardContents.count) { cardContents[$0] }
+        SetGame(initialNumberOfPlayingCards: 9, totalNumberOfCards: cardContents.count) { cardContents[$0] }
     }
     
     

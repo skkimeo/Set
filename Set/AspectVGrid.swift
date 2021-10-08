@@ -59,7 +59,7 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
         if columnCount > itemCount {
             columnCount = itemCount
         }
-        return max(floor(size.width / CGFloat(columnCount)), 80)
+        return max(floor(size.width / CGFloat(columnCount)), 100)
     }
 }
 

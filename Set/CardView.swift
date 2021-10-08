@@ -26,7 +26,8 @@ struct CardView: View {
                     cardShape.strokeBorder(lineWidth: 3).foregroundColor(.orange)
                 }
                 //                GeometryReader { geometry in
-                VStack {
+                HStack {
+//                    Spacer()
                     switch card.symbol.numberOfShapes {
                     case 1: // change case to .one
                         createSymbol(for: card)
@@ -40,8 +41,10 @@ struct CardView: View {
                     default:
                         createSymbol(for: card)
                     }
+//                    Spacer()
                 }
-                .padding(.horizontal)
+//                .padding()
+                .padding(8)
                 
                 if card.isNotMatched {
                     cardShape.foregroundColor(.gray).opacity(0.1)
@@ -74,15 +77,15 @@ struct CardView: View {
         switch symbol.pattern {
         case .filled:
             shape.fill().foregroundColor(symbol.color.getColor())
-                .aspectRatio(2/1, contentMode: .fit)
+                .aspectRatio(1/2, contentMode: .fit)
             
         case .shaded:
             StripeView(shape: shape, color: symbol.color.getColor())
-                .aspectRatio(2/1, contentMode: .fit)
+                .aspectRatio(1/2, contentMode: .fit)
             
         case .stroked:
             shape.stroke(lineWidth: 2).foregroundColor(symbol.color.getColor())
-                .aspectRatio(2/1, contentMode: .fit)
+                .aspectRatio(1/2, contentMode: .fit)
         }
     }
     

@@ -13,9 +13,9 @@ struct SquareSetGameView: View {
     var body: some View {
         NavigationView {
             VStack {
-                ZStack{
+                VStack{
                     if !game.isEndOfGame {
-                        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+                        AspectVGrid(items: game.cards, aspectRatio: 3/2) { card in
                             CardView(card: card)
                                 .padding(5)
                                 .onTapGesture {
@@ -55,7 +55,7 @@ struct SquareSetGameView: View {
             }
             .padding()
             
-        }.navigationBarTitle("Set!")
+        }.navigationBarTitle("Sun-Set!")
         }
     }
 }
