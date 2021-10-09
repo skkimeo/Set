@@ -20,9 +20,9 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
     
     var body: some View {
         GeometryReader { geometry in
-            ScrollView{
-                VStack{
-                    let width: CGFloat = widthThatFits(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio)
+            ScrollView {
+                VStack {
+                    let width: CGFloat = min(widthThatFits(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio), 80)
                     LazyVGrid(columns: [adaptiveGridItem(width: width)], spacing: 0) {
                         ForEach(items) {
                             content($0)
@@ -59,7 +59,7 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
         if columnCount > itemCount {
             columnCount = itemCount
         }
-        return max(floor(size.width / CGFloat(columnCount)), 80)
+        return floor(size.width / CGFloat(columnCount))
     }
 }
 

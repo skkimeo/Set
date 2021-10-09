@@ -7,29 +7,26 @@
 
 import SwiftUI
 
-struct SquareSetGameView: View {
-    @ObservedObject var game: SquareSetGame
+struct SunSetGameView: View {
+    @ObservedObject var game: SunSetGame
     
     var body: some View {
         NavigationView {
             VStack {
-                VStack{
-                    Text("Score: \(game.score)").bold().foregroundColor(.black).padding(.vertical)
-                    
-                    if !game.isEndOfGame {
-                        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-                            CardView(card: card)
-                                .padding(5)
-                                .onTapGesture {
-                                    game.choose(card)
-                                }
-                        }
-                    } else {
-                        Text("Game Over").foregroundColor(.green).font(.largeTitle)
+                Text("Score: \(game.score)")
+                    .bold().foregroundColor(.black).padding(.bottom)
+                
+                if !game.isEndOfGame {
+                    AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+                        CardView(card: card)
+                            .padding(5)
+                            .onTapGesture {
+                                game.choose(card)
+                            }
                     }
+                } else {
+                    Text("Game Over").foregroundColor(.green).font(.largeTitle)
                 }
-                .padding(.horizontal)
-                .foregroundColor(.blue)
                 
                 HStack {
                     Spacer()
@@ -46,15 +43,18 @@ struct SquareSetGameView: View {
                         Spacer()
                     }
                 }
-                .padding()
-            }.navigationBarTitle("Sun-Set!")
+                .padding(.bottom)
+            }
+            .padding()
+            .foregroundColor(.blue)
+            .navigationBarTitle("Sun-Set!")
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let game = SquareSetGame()
-        SquareSetGameView(game: game)
+        let game = SunSetGame()
+        SunSetGameView(game: game)
     }
 }

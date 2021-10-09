@@ -24,37 +24,54 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     
     private(set) var timeLastThreeCardsWereChosen = Date()
     
-    mutating func choose(_ card: Card) {
-        turnOffCheat()
-        //        if isEndOfGame {
-        //            return
-        //        }
-        
-        if chosenCards.count == 3 {
-            if playingCards.first(where: {$0 == chosenCards.first})!.isMatched { // think of way to simplify
-                // erase those in set
-                chosenCards.forEach { card in
-                    let matchedIndex = playingCards.firstIndex(of: card)!
+    
+    mutating func resetChosenCards() {
+        if playingCards.first(where: {$0 == chosenCards.first})!.isMatched {
+            chosenCards.forEach { card in
+                if let matchedIndex = playingCards.firstIndex(of: card) {
                     playingCards.remove(at: matchedIndex)
                     deal_a_card(at: matchedIndex)
                 }
             }
-            else {
-                chosenCards.forEach { card in
-                    let failedMatchIndex = playingCards.firstIndex(of: card)!
+        }
+        else {
+            chosenCards.forEach { card in
+                if let failedMatchIndex = playingCards.firstIndex(of: card) {
                     playingCards[failedMatchIndex].isChosen = false
                     playingCards[failedMatchIndex].isNotMatched = false
                 }
             }
-            chosenCards = []
         }
-        if let chosenIndex = playingCards.firstIndex(where: { $0.id == card.id }) {
+        chosenCards = []
+    }
+    
+    mutating func checkEndOfGame(in playingCards: [Card]) -> Bool {
+        var cards = playingCards
+        
+        if chosenCards.count == 3 {
+            chosenCards.forEach { card in
+                let matchedIndex = cards.firstIndex(of: card)!
+                cards.remove(at: matchedIndex)
+            }
+        }
+        
+        if getRemainingSet(in: cards) != nil {
+            return false
+        }
+        return true
+    }
+    
+    mutating func choose(_ card: Card) {
+        turnOffCheat()
+        
+        if chosenCards.count == 3 { resetChosenCards() }
+        
+        if let chosenIndex = playingCards.firstIndex(where: { $0 == card }) {
             if !playingCards[chosenIndex].isChosen {
                 playingCards[chosenIndex].isChosen = true
                 chosenCards.append(playingCards[chosenIndex])
                 
                 if chosenCards.count == 3 {
-                    
                     let timeNewSetWasFound = Date()
                     let timeSpent = Int(timeNewSetWasFound.timeIntervalSince(timeLastThreeCardsWereChosen))
                     
@@ -66,17 +83,8 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                             playingCards[index].isMatched = true
                         }
                         
-                        
                         if numberOfPlayedCards == totalNumberOfCards {
-                            var dupPlayingCards = playingCards
-                            chosenCards.forEach { card in
-                                let matchedIndex = dupPlayingCards.firstIndex(of: card)!
-                                dupPlayingCards.remove(at: matchedIndex)
-                            }
-                            
-                            if dupPlayingCards.isEmpty || getRemainingSet(in: dupPlayingCards) == nil {
-                                isEndOfGame = true
-                            }
+                            isEndOfGame = checkEndOfGame(in: playingCards)
                         }
                         
                     } else {
@@ -98,6 +106,10 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     }
     
     mutating func getRemainingSet(in cards: [Card]) -> [Card]? {
+        
+        if cards.isEmpty {
+            return nil
+        }
         
         for i in 0..<cards.count - 2 {
             for j in (i + 1)..<cards.count - 1 {

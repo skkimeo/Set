@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class SquareSetGame: ObservableObject {
+class SunSetGame: ObservableObject {
     typealias Card = SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes>.Card
     
     static var cardContents: [Card.CardContent] = {
@@ -83,8 +83,8 @@ class SquareSetGame: ObservableObject {
     }
     
     func newGame() {
-        SquareSetGame.cardContents.shuffle()
-        model = SquareSetGame.createSetGame()
+        SunSetGame.cardContents.shuffle()
+        model = SunSetGame.createSetGame()
         
     }
     
@@ -97,18 +97,6 @@ class SquareSetGame: ObservableObject {
         case roundedRectangle
         case diamond
         case squiggle
-        
-        @ViewBuilder
-        func getShape() -> some View {
-            switch self {
-            case .roundedRectangle:
-                RoundedRectangle(cornerRadius: 50)
-            case .diamond:
-                Diamond()
-            case .squiggle:
-                RoundedRectangle(cornerRadius: 0)
-            }
-        }
     }
     
     enum ContentColor: CaseIterable {
@@ -140,10 +128,4 @@ class SquareSetGame: ObservableObject {
         case three
     }
     
-//    struct CardContent {
-//        let shape: Shape
-//        let color: Color
-//        let pattern: Pattern
-//        let numberOfShapes: NumberOfShapes
-//    }
 }

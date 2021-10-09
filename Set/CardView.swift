@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CardView: View {
-    let card: SquareSetGame.Card
+    let card: SunSetGame.Card
 //    let isEndOfGame: Boo
     
     var body: some View {
@@ -64,7 +64,7 @@ struct CardView: View {
     }
 
     @ViewBuilder
-    func createSymbol(for card: SquareSetGame.Card) -> some View {
+    func createSymbol(for card: SunSetGame.Card) -> some View {
         switch card.symbol.shape {
         case .roundedRectangle:
             createSymbolView(of: card.symbol, shape: RoundedRectangle(cornerRadius: 50))
@@ -77,7 +77,7 @@ struct CardView: View {
     }
     
     @ViewBuilder
-    private func createSymbolView<SymbolShape>(of symbol: SquareSetGame.Card.CardContent, shape: SymbolShape) -> some View where SymbolShape: Shape {
+    private func createSymbolView<SymbolShape>(of symbol: SunSetGame.Card.CardContent, shape: SymbolShape) -> some View where SymbolShape: Shape {
 
         switch symbol.pattern {
         case .filled:

@@ -9,10 +9,10 @@ import SwiftUI
 
 @main
 struct SetApp: App {
-    let game = SquareSetGame()
+    let game = SunSetGame()
     var body: some Scene {
         WindowGroup {
-            SquareSetGameView(game: game)
+            SunSetGameView(game: game)
         }
     }
 }
