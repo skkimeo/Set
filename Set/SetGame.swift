@@ -74,7 +74,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     let timeNewSetWasFound = Date()
                     let timeSpent = Int(timeNewSetWasFound.timeIntervalSince(timeLastThreeCardsWereChosen))
                     
-                    if checkSet(of: chosenCards) {
+                    if formSet(by: chosenCards) {
                         score += 2 * max(20 - timeSpent, 1)
                         
                         chosenCards.forEach { card in
@@ -113,7 +113,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         for i in 0..<cards.count - 2 {
             for j in (i + 1)..<cards.count - 1 {
                 for k in (j + 1)..<cards.count {
-                    if checkSet(of: [cards[i], cards[j], cards[k]]) {
+                    if formSet(by: [cards[i], cards[j], cards[k]]) {
                         return [cards[i], cards[j], cards[k]]
                     }
                 }
@@ -123,7 +123,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     }
     
     
-    mutating func checkSet(of cards: [Card]) -> Bool {
+    mutating func formSet(by cards: [Card]) -> Bool {
         var shapes = Set<CardSymbolShape>()
         var colors = Set<CardSymbolColor>()
         var patterns = Set<CardSymbolPattern>()
