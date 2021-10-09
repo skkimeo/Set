@@ -60,7 +60,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     
                     if checkSet(in: chosenCards) {
                         score += 2 * max(20 - timeSpent, 1)
-                                    
+                        
                         chosenCards.forEach { card in
                             let index = playingCards.firstIndex(of: card)!
                             playingCards[index].isMatched = true
@@ -182,9 +182,12 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     
     mutating func turnOffCheat() {
         if remainingSet != nil {
-            for index in 0..<2 {
-                playingCards[playingCards.firstIndex(of: remainingSet![index])!].isHint = false
+            for remainingIndex in 0..<2 {
+                if let index = playingCards.firstIndex(of: remainingSet![remainingIndex]) {
+                    playingCards[index].isHint = false
+                }
             }
+            remainingSet = nil
         }
     }
     
