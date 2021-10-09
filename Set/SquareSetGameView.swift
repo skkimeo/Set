@@ -14,7 +14,8 @@ struct SquareSetGameView: View {
         NavigationView {
             VStack {
                 VStack{
-                    Text("Score: \(game.score)")
+                    Text("Score: \(game.score)").bold().foregroundColor(.black).padding(.vertical)
+                    
                     if !game.isEndOfGame {
                         AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
                             CardView(card: card)
@@ -35,14 +36,16 @@ struct SquareSetGameView: View {
                     Spacer()
                     Button { game.newGame() } label: { Text("New Game") }
                     Spacer()
-                    Button { game.cheat() } label: { Text("Cheat") }
-                    Spacer()
-                    if game.numberOfPlayedCards < game.totalNumberOfCards {
-                        Button { game.dealThreeCards() } label: { Text("Deal 3 Cards") }
-                    } else {
-                        Text("Deal 3 Cards").foregroundColor(.gray)
+                    if !game.isEndOfGame {
+                        Button { game.cheat() } label: { Text("Cheat") }
+                        Spacer()
+                        if game.numberOfPlayedCards < game.totalNumberOfCards {
+                            Button { game.dealThreeCards() } label: { Text("Deal 3 Cards") }
+                        } else {
+                            Text("Deal 3 Cards").foregroundColor(.gray)
+                        }
+                        Spacer()
                     }
-                    Spacer()
                 }
                 .padding()
             }.navigationBarTitle("Sun-Set!")

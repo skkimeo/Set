@@ -12,16 +12,25 @@ class SquareSetGame: ObservableObject {
     
     static var cardContents: [Card.CardContent] = {
         var contents = [Card.CardContent]()
-////
-//////        SMALL DECK OF CARDS
+
+////      9 DECK OF CARDS
 //        for shape in ContentShape.allCases {
 //            for color in ContentColor.allCases {
-////                for number in NumberOfContentShapes.allCases {
 //                    contents.append(Card.CardContent(shape: shape, color: color, pattern: .stroked, numberOfShapes: 1))
-////                }
 //            }
 //        }
+        
+//      12 DECK OF CARDS
+//        for shape in ContentShape.allCases {
+//            for color in ContentColor.allCases {
+//                for number in NumberOfContentShapes.allCases {
+//                    contents.append(Card.CardContent(shape: shape, color: color, pattern: .stroked, numberOfShapes: number.rawValue))
+//                }
+//            }
+//        }
+        
 
+//      81 CARDS
         for shape in ContentShape.allCases {
             for color in ContentColor.allCases {
                 for pattern in ContentPattern.allCases {

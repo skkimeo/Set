@@ -74,11 +74,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                                 dupPlayingCards.remove(at: matchedIndex)
                             }
                             
-                            if dupPlayingCards.isEmpty {
-                                isEndOfGame = true
-                            }
-                            
-                            if getRemainingSet(in: playingCards) != nil {
+                            if dupPlayingCards.isEmpty || getRemainingSet(in: playingCards) == nil {
                                 isEndOfGame = true
                             }
                         }
@@ -176,9 +172,9 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 deal_a_card(at: playingCards.endIndex)
             }
         }
-        
+        print(playingCards.count)
         if numberOfPlayedCards == totalNumberOfCards {
-            if getRemainingSet(in: playingCards) != nil {
+            if getRemainingSet(in: playingCards) == nil {
                 isEndOfGame = true
             }
         }
