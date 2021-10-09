@@ -13,17 +13,22 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private var chosenCards = [Card]()
     private(set) var isEndOfGame = false
     
-    let totalNumberOfCards = 81
-    private let initialNumberOfPlayingCards = 12
+    private(set) var totalNumberOfCards: Int
+    private var initialNumberOfPlayingCards: Int
     
     private let createCardSymbol: (Int) -> Card.CardContent
     private(set) var playingCards: [Card]
+    private(set) var remainingSet: [Card]?
+    
+    private(set) var score = 0
+    
+    private(set) var timeLastThreeCardsWereChosen = Date()
     
     mutating func choose(_ card: Card) {
-        if isEndOfGame {
-            return
-        }
-                
+        //        if isEndOfGame {
+        //            return
+        //        }
+        
         if chosenCards.count == 3 {
             if playingCards.first(where: {$0 == chosenCards.first})!.isMatched { // think of way to simplify
                 // erase those in set
@@ -32,13 +37,6 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     playingCards.remove(at: matchedIndex)
                     deal_a_card(at: matchedIndex)
                 }
-                
-//                if numberOfPlayedCards == totalNumberOfCards {
-//                    if checkIfEndOfGame(in: playingCards) {
-//                        isEndOfGame = true
-//                        return
-//                    }
-//                }
             }
             else {
                 chosenCards.forEach { card in
@@ -49,18 +47,24 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             }
             chosenCards = []
         }
-        //        else { //
         if let chosenIndex = playingCards.firstIndex(where: { $0.id == card.id }) {
             if !playingCards[chosenIndex].isChosen {
                 playingCards[chosenIndex].isChosen = true
                 chosenCards.append(playingCards[chosenIndex])
                 
                 if chosenCards.count == 3 {
-                    if findSet(of: chosenCards) {
+                    
+                    let timeNewSetWasFound = Date()
+                    let timeSpent = Int(timeNewSetWasFound.timeIntervalSince(timeLastThreeCardsWereChosen))
+                    
+                    if checkSet(in: chosenCards) {
+                        score += 2 * max(20 - timeSpent, 1)
+                                    
                         chosenCards.forEach { card in
                             let index = playingCards.firstIndex(of: card)!
                             playingCards[index].isMatched = true
                         }
+                        
                         
                         if numberOfPlayedCards == totalNumberOfCards {
                             var dupPlayingCards = playingCards
@@ -69,17 +73,23 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                                 dupPlayingCards.remove(at: matchedIndex)
                             }
                             
-                            if dupPlayingCards.isEmpty || checkIfEndOfGame(in: dupPlayingCards) {
+                            if dupPlayingCards.isEmpty {
+                                isEndOfGame = true
+                            }
+                            
+                            if getRemainingSet(in: playingCards) != nil {
                                 isEndOfGame = true
                             }
                         }
-                
+                        
                     } else {
+                        score -= 2 * max(20 - timeSpent, 1)
                         chosenCards.forEach { card in
                             let index = playingCards.firstIndex(of: card)!
                             playingCards[index].isNotMatched = true
                         }
                     }
+                    timeLastThreeCardsWereChosen = timeNewSetWasFound
                 }
             } else { // diselect
                 playingCards[chosenIndex].isChosen = false
@@ -88,25 +98,24 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             
         }
         
-        //        }
     }
     
-    mutating func checkIfEndOfGame(in cards: [Card]) -> Bool {
+    mutating func getRemainingSet(in cards: [Card]) -> [Card]? {
         
         for i in 0..<cards.count - 2 {
             for j in (i + 1)..<cards.count - 1 {
                 for k in (j + 1)..<cards.count {
-                    if findSet(of: [cards[i], cards[j], cards[k]]) {
-                        return false
+                    if checkSet(in: [cards[i], cards[j], cards[k]]) {
+                        return [cards[i], cards[j], cards[k]]
                     }
                 }
             }
         }
-        return true
+        return nil
     }
-                 
     
-    mutating func findSet(of cards: [Card]) -> Bool {
+    
+    mutating func checkSet(in cards: [Card]) -> Bool {
         var shapes = Set<CardSymbolShape>()
         var colors = Set<CardSymbolColor>()
         var patterns = Set<CardSymbolPattern>()
@@ -135,6 +144,11 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     }
     
     mutating func dealThreeCards() {
+        cheat()
+        if remainingSet != nil {
+            score -= 3
+        }
+        
         if chosenCards.count == 3 {
             let chosenCard = playingCards.first(where: {$0 == chosenCards.first})!
             if chosenCard.isMatched {
@@ -154,7 +168,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 }
             }
             chosenCards = []
-
+            
         } else {
             for _ in 0..<3 {
                 deal_a_card(at: playingCards.endIndex)
@@ -162,13 +176,32 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
         
         if numberOfPlayedCards == totalNumberOfCards {
-            if checkIfEndOfGame(in: playingCards) {
+            if getRemainingSet(in: playingCards) != nil {
                 isEndOfGame = true
             }
         }
     }
     
-    init(createCardContent: @escaping (Int) -> Card.CardContent) {
+    mutating func cheat() {
+        var dupPlayingCards = playingCards
+        if chosenCards.count == 3 {
+            chosenCards.forEach { card in
+                let matchedIndex = dupPlayingCards.firstIndex(of: card)!
+                dupPlayingCards.remove(at: matchedIndex)
+            }
+            
+        }
+        
+        if let remainingSet = getRemainingSet(in: dupPlayingCards) {
+            self.remainingSet = remainingSet
+        } else {
+            self.remainingSet = nil
+        }
+    }
+    
+    init(initialNumberOfPlayingCards: Int, totalNumberOfCards: Int, createCardContent: @escaping (Int) -> Card.CardContent) {
+        self.initialNumberOfPlayingCards = initialNumberOfPlayingCards
+        self.totalNumberOfCards = totalNumberOfCards
         self.createCardSymbol = createCardContent
         playingCards = []
         for _ in 0..<initialNumberOfPlayingCards {
@@ -179,6 +212,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     }
     
     struct Card: Identifiable, Equatable {
+        
         let symbol: CardContent
         var isChosen: Bool = false
         var isMatched = false
@@ -197,5 +231,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
     }
 }
+
+
 
 

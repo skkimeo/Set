@@ -12,8 +12,8 @@ struct Diamond: Shape {
         var p = Path()
         
         let center = CGPoint(x: rect.midX, y: rect.midY)
-        let width = rect.height / 2
-        let height = rect.height
+        let width = rect.width
+        let height = rect.width / 2
         
         let topPoint = CGPoint(x: center.x, y: center.y + height/2)
         let bottomPoint = CGPoint(x: center.x, y: center.y - height/2)

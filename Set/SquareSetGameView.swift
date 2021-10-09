@@ -11,68 +11,41 @@ struct SquareSetGameView: View {
     @ObservedObject var game: SquareSetGame
     
     var body: some View {
-<<<<<<< HEAD
         NavigationView {
             VStack {
                 VStack{
+                    Text("Score: \(game.score)")
                     if !game.isEndOfGame {
-                        AspectVGrid(items: game.cards, aspectRatio: 3/2) { card in
+                        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
                             CardView(card: card)
                                 .padding(5)
                                 .onTapGesture {
                                     game.choose(card)
                                 }
-                            
                         }
-                        
-                    }
-                    if game.isEndOfGame {
+                    } else {
                         Text("Game Over!")
                             .foregroundColor(.green).font(.largeTitle)
-=======
-        VStack {
-            if game.isEndOfGame {
-                Text("Game Over!")
-                    .foregroundColor(.green).font(.largeTitle)
-            }
-            AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-                CardView(card: card)
-                    .padding(5)
-                    .onTapGesture {
-                        game.choose(card)
->>>>>>> parent of 55733c0 (added "NavigationView")
-                    }
-                
-                
-            }
-            .padding(.horizontal)
-            .foregroundColor(.blue)
-            HStack {
-                Spacer()
-                Button {
-                    game.newGame()
-                } label: {
-                    Text("New Game")
-                }
-                Spacer()
-                if game.numberOfPlayedCards < game.totalNumberOfCards {
-                    Button {
-                        game.dealThreeCards()
-                    } label: {
-                        Text("Deal 3 Cards")
                     }
                 }
-                else {
-                    Text("Deal 3 Cards").foregroundColor(.gray)
+                .padding(.horizontal)
+                .foregroundColor(.blue)
+                
+                HStack {
+                    Spacer()
+                    Button { game.newGame() } label: { Text("New Game") }
+                    Spacer()
+                    Button { game.cheat() } label: { Text("Cheat") }
+                    Spacer()
+                    if game.numberOfPlayedCards < game.totalNumberOfCards {
+                        Button { game.dealThreeCards() } label: { Text("Deal 3 Cards") }
+                    } else {
+                        Text("Deal 3 Cards").foregroundColor(.gray)
+                    }
+                    Spacer()
                 }
-                Spacer()
-            }
-            .padding()
-            
-<<<<<<< HEAD
-        }.navigationBarTitle("Sun-Set!")
-=======
->>>>>>> parent of 55733c0 (added "NavigationView")
+                .padding()
+            }.navigationBarTitle("Sun-Set!")
         }
     }
 }

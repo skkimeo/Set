@@ -12,7 +12,6 @@ class SquareSetGame: ObservableObject {
     
     static var cardContents: [Card.CardContent] = {
         var contents = [Card.CardContent]()
-<<<<<<< HEAD
 ////
 //////        SMALL DECK OF CARDS
 //        for shape in ContentShape.allCases {
@@ -32,37 +31,12 @@ class SquareSetGame: ObservableObject {
                 }
             }
         }
-=======
-//
-////        SMALL DECK OF CARDS
-//        for shape in ContentShape.allCases {
-//            for color in ContentColor.allCases {
-//                for number in NumberOfContentShapes.allCases {
-//                    contents.append(Card.CardContent(shape: shape, color: color, pattern: .shaded, numberOfShapes: number.rawValue))
-//                }
-//            }
-//        }
->>>>>>> parent of 55733c0 (added "NavigationView")
-        
-        for shape in ContentShape.allCases {
-            for color in ContentColor.allCases {
-                for pattern in ContentPattern.allCases {
-                    for numberOfShapes in NumberOfContentShapes.allCases {
-                        contents.append(Card.CardContent( shape: shape, color: color, pattern: pattern, numberOfShapes: numberOfShapes.rawValue))
-                    }
-                }
-            }
-        }
         
         return contents.shuffled()
     }()
     
     static private func createSetGame() -> SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> {
-<<<<<<< HEAD
-        SetGame(initialNumberOfPlayingCards: 9, totalNumberOfCards: cardContents.count) { cardContents[$0] }
-=======
-        return SetGame { cardContents[$0] }
->>>>>>> parent of 55733c0 (added "NavigationView")
+        SetGame(initialNumberOfPlayingCards: 12, totalNumberOfCards: cardContents.count) { cardContents[$0] }
     }
     
     
@@ -84,6 +58,10 @@ class SquareSetGame: ObservableObject {
         model.isEndOfGame
     }
     
+    var score: Int {
+        model.score
+    }
+    
     // MARK: -Intent(s)
     
     func choose(_ card: Card) {
@@ -98,6 +76,10 @@ class SquareSetGame: ObservableObject {
         SquareSetGame.cardContents.shuffle()
         model = SquareSetGame.createSetGame()
         
+    }
+    
+    func cheat() {
+        model.cheat()
     }
     
     
