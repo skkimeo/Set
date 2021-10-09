@@ -50,6 +50,11 @@ struct CardView: View {
                     cardShape.foregroundColor(.gray).opacity(0.1)
                     cardShape.strokeBorder(lineWidth: 3).foregroundColor(.gray)
                 }
+                
+                if card.isHint {
+                    cardShape.foregroundColor(.green).opacity(0.2)
+                    cardShape.strokeBorder(lineWidth: 3).foregroundColor(.green)
+                }
                 //                    }
                 //                }
             }

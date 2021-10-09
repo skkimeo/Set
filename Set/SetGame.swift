@@ -25,6 +25,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private(set) var timeLastThreeCardsWereChosen = Date()
     
     mutating func choose(_ card: Card) {
+        turnOffCheat()
         //        if isEndOfGame {
         //            return
         //        }
@@ -148,6 +149,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         if remainingSet != nil {
             score -= 3
         }
+        turnOffCheat()
         
         if chosenCards.count == 3 {
             let chosenCard = playingCards.first(where: {$0 == chosenCards.first})!
@@ -182,7 +184,16 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
     }
     
+    mutating func turnOffCheat() {
+        if remainingSet != nil {
+            for index in 0..<2 {
+                playingCards[playingCards.firstIndex(of: remainingSet![index])!].isHint = false
+            }
+        }
+    }
+    
     mutating func cheat() {
+        score -= 3
         var dupPlayingCards = playingCards
         if chosenCards.count == 3 {
             chosenCards.forEach { card in
@@ -194,6 +205,11 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         
         if let remainingSet = getRemainingSet(in: dupPlayingCards) {
             self.remainingSet = remainingSet
+            
+            for index in 0..<2 {
+                playingCards[playingCards.firstIndex(of: remainingSet[index])!].isHint = true
+            }
+            
         } else {
             self.remainingSet = nil
         }
@@ -217,6 +233,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         var isChosen: Bool = false
         var isMatched = false
         var isNotMatched = false
+        var isHint = false
         let id: Int
         
         struct CardContent {
