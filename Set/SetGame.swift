@@ -7,6 +7,8 @@
 
 import Foundation
 
+//trying to fix xcode push error
+
 struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes> where CardSymbolShape: Hashable, CardSymbolColor: Hashable, CardSymbolPattern: Hashable {
     private(set) var numberOfPlayedCards = 0
     private var chosenCards = [Card]()
