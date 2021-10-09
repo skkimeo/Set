@@ -9,7 +9,6 @@ import Foundation
 
 struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes> where CardSymbolShape: Hashable, CardSymbolColor: Hashable, CardSymbolPattern: Hashable {
     private(set) var numberOfPlayedCards = 0
-    private var numberOfChosenCards = 0
     private var chosenCards = [Card]()
     private(set) var isEndOfGame = false
     
@@ -30,7 +29,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             chosenCards.forEach { card in
                 if let matchedIndex = playingCards.firstIndex(of: card) {
                     playingCards.remove(at: matchedIndex)
-                    deal_a_card(at: matchedIndex)
+                    dealOneCard(at: matchedIndex)
                 }
             }
         }
@@ -55,7 +54,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             }
         }
         
-        if getRemainingSet(in: cards) != nil {
+        if getAnyRemainingSet(in: cards) != nil {
             return false
         }
         return true
@@ -75,7 +74,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     let timeNewSetWasFound = Date()
                     let timeSpent = Int(timeNewSetWasFound.timeIntervalSince(timeLastThreeCardsWereChosen))
                     
-                    if checkSet(in: chosenCards) {
+                    if checkSet(of: chosenCards) {
                         score += 2 * max(20 - timeSpent, 1)
                         
                         chosenCards.forEach { card in
@@ -105,7 +104,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         
     }
     
-    mutating func getRemainingSet(in cards: [Card]) -> [Card]? {
+    mutating func getAnyRemainingSet(in cards: [Card]) -> [Card]? {
         
         if cards.isEmpty {
             return nil
@@ -114,7 +113,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         for i in 0..<cards.count - 2 {
             for j in (i + 1)..<cards.count - 1 {
                 for k in (j + 1)..<cards.count {
-                    if checkSet(in: [cards[i], cards[j], cards[k]]) {
+                    if checkSet(of: [cards[i], cards[j], cards[k]]) {
                         return [cards[i], cards[j], cards[k]]
                     }
                 }
@@ -124,7 +123,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     }
     
     
-    mutating func checkSet(in cards: [Card]) -> Bool {
+    mutating func checkSet(of cards: [Card]) -> Bool {
         var shapes = Set<CardSymbolShape>()
         var colors = Set<CardSymbolColor>()
         var patterns = Set<CardSymbolPattern>()
@@ -144,7 +143,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         return true
     }
     
-    mutating func deal_a_card(at index: Int) {
+    mutating func dealOneCard(at index: Int) {
         if numberOfPlayedCards < totalNumberOfCards {
             let symbol = createCardSymbol(numberOfPlayedCards)
             playingCards.insert(Card(symbol: symbol, id: numberOfPlayedCards), at: index)
@@ -153,42 +152,22 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     }
     
     mutating func dealThreeCards() {
-        cheat()
-        if remainingSet != nil {
-            score -= 3
-        }
+        cheat() // should change this..not clear to others
+        if remainingSet != nil { score -= 3 }
         turnOffCheat()
         
-        if chosenCards.count == 3 {
-            let chosenCard = playingCards.first(where: {$0 == chosenCards.first})!
-            if chosenCard.isMatched {
-                chosenCards.forEach { card in
-                    let matchedIndex = playingCards.firstIndex(of: card)!
-                    playingCards.remove(at: matchedIndex)
-                    deal_a_card(at: matchedIndex)
-                }
-            } else {
-                chosenCards.forEach { card in
-                    let failedMatchIndex = playingCards.firstIndex(of: card)!
-                    playingCards[failedMatchIndex].isChosen = false
-                    playingCards[failedMatchIndex].isNotMatched = false
-                }
-                for _ in 0..<3 {
-                    deal_a_card(at: playingCards.endIndex)
-                }
-            }
-            chosenCards = []
-            
-        } else {
+        switch chosenCards.count {
+        case 3:
+            let chosenCard = playingCards.first(where: { $0  == chosenCards.first})!
+            resetChosenCards()
+            if chosenCard.isMatched { fallthrough }
+        default:
             for _ in 0..<3 {
-                deal_a_card(at: playingCards.endIndex)
+                dealOneCard(at: playingCards.endIndex)
             }
         }
-        print(playingCards.count)
         if numberOfPlayedCards == totalNumberOfCards {
-            if getRemainingSet(in: playingCards) == nil {
-                isEndOfGame = true
-            }
+            isEndOfGame = checkEndOfGame(in: playingCards)
         }
     }
     
@@ -214,7 +193,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             
         }
         
-        if let remainingSet = getRemainingSet(in: dupPlayingCards) {
+        if let remainingSet = getAnyRemainingSet(in: dupPlayingCards) {
             self.remainingSet = remainingSet
             
             for index in 0..<2 {
