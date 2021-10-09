@@ -25,8 +25,7 @@ struct SquareSetGameView: View {
                                 }
                         }
                     } else {
-                        Text("Game Over!")
-                            .foregroundColor(.green).font(.largeTitle)
+                        Text("Game Over").foregroundColor(.green).font(.largeTitle)
                     }
                 }
                 .padding(.horizontal)

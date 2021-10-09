@@ -74,7 +74,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                                 dupPlayingCards.remove(at: matchedIndex)
                             }
                             
-                            if dupPlayingCards.isEmpty || getRemainingSet(in: playingCards) == nil {
+                            if dupPlayingCards.isEmpty || getRemainingSet(in: dupPlayingCards) == nil {
                                 isEndOfGame = true
                             }
                         }
