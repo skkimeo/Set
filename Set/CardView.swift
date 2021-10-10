@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CardView: View {
     let card: SunSetGame.Card
-//    let isEndOfGame: Boo
     
     var body: some View {
         ZStack {
@@ -17,7 +16,6 @@ struct CardView: View {
             if card.isMatched {
                 cardShape.foregroundColor(.green).opacity(0.1)
                 cardShape.strokeBorder(lineWidth:3).foregroundColor(.green)
-//                if
                 
             } else {
                 cardShape.fill().foregroundColor(.white)
@@ -25,25 +23,11 @@ struct CardView: View {
                 if card.isChosen {
                     cardShape.strokeBorder(lineWidth: 3).foregroundColor(.orange)
                 }
-                //                GeometryReader { geometry in
                 VStack {
-//                    Spacer()
-                    switch card.symbol.numberOfShapes {
-                    case 1: // change case to .one
-                        createSymbol(for: card)
-                    case 2:
-                        createSymbol(for: card)
-                        createSymbol(for: card)
-                    case 3:
-                        createSymbol(for: card)
-                        createSymbol(for: card)
-                        createSymbol(for: card)
-                    default:
+                    ForEach(0..<card.symbol.numberOfShapes, id: \.self) { _ in
                         createSymbol(for: card)
                     }
-//                    Spacer()
                 }
-//                .padding()
                 .padding()
                 
                 if card.isNotMatched {
@@ -55,14 +39,10 @@ struct CardView: View {
                     cardShape.foregroundColor(.green).opacity(0.2)
                     cardShape.strokeBorder(lineWidth: 3).foregroundColor(.green)
                 }
-                //                    }
-                //                }
             }
-            
         }
-        
     }
-
+    
     @ViewBuilder
     func createSymbol(for card: SunSetGame.Card) -> some View {
         switch card.symbol.shape {
@@ -70,7 +50,7 @@ struct CardView: View {
             createSymbolView(of: card.symbol, shape: RoundedRectangle(cornerRadius: 50))
         case .squiggle:
             createSymbolView(of: card.symbol, shape:
-                             Squiggle())
+                                Squiggle())
         case .diamond:
             createSymbolView(of: card.symbol, shape: Diamond())
         }
@@ -78,7 +58,7 @@ struct CardView: View {
     
     @ViewBuilder
     private func createSymbolView<SymbolShape>(of symbol: SunSetGame.Card.CardContent, shape: SymbolShape) -> some View where SymbolShape: Shape {
-
+        
         switch symbol.pattern {
         case .filled:
             shape.fill().foregroundColor(symbol.color.getColor())
@@ -94,7 +74,7 @@ struct CardView: View {
         }
     }
     
-    }
+}
 
 //
 //struct CardView_Previews: PreviewProvider {
