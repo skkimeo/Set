@@ -12,16 +12,16 @@ struct CardView: View {
     
     var body: some View {
         ZStack {
-            let cardShape = RoundedRectangle(cornerRadius: 10)
+            let cardShape = RoundedRectangle(cornerRadius: DrawingConstants.cardCornerRadius)
             if card.isMatched {
-                cardShape.foregroundColor(.green).opacity(0.1)
-                cardShape.strokeBorder(lineWidth:3).foregroundColor(.green)
+                cardShape.foregroundColor(.green).opacity(DrawingConstants.effectOpacity)
+                cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.green)
                 
             } else {
                 cardShape.fill().foregroundColor(.white)
-                cardShape.strokeBorder(lineWidth: 2)
+                cardShape.strokeBorder(lineWidth: DrawingConstants.defaultLineWidth)
                 if card.isChosen {
-                    cardShape.strokeBorder(lineWidth: 3).foregroundColor(.orange)
+                    cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.orange)
                 }
                 VStack {
                     ForEach(0..<card.symbol.numberOfShapes, id: \.self) { _ in
@@ -31,13 +31,13 @@ struct CardView: View {
                 .padding()
                 
                 if card.isNotMatched {
-                    cardShape.foregroundColor(.gray).opacity(0.1)
-                    cardShape.strokeBorder(lineWidth: 3).foregroundColor(.gray)
+                    cardShape.foregroundColor(.gray).opacity(DrawingConstants.effectOpacity)
+                    cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.gray)
                 }
                 
                 if card.isHint {
-                    cardShape.foregroundColor(.green).opacity(0.2)
-                    cardShape.strokeBorder(lineWidth: 3).foregroundColor(.green)
+                    cardShape.foregroundColor(.green).opacity(DrawingConstants.effectOpacity)
+                    cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.green)
                 }
             }
         }
@@ -47,10 +47,9 @@ struct CardView: View {
     func createSymbol(for card: SunSetGame.Card) -> some View {
         switch card.symbol.shape {
         case .roundedRectangle:
-            createSymbolView(of: card.symbol, shape: RoundedRectangle(cornerRadius: 50))
+            createSymbolView(of: card.symbol, shape: RoundedRectangle(cornerRadius: DrawingConstants.symbolCornerRadius))
         case .squiggle:
-            createSymbolView(of: card.symbol, shape:
-                                Squiggle())
+            createSymbolView(of: card.symbol, shape: Squiggle())
         case .diamond:
             createSymbolView(of: card.symbol, shape: Diamond())
         }
@@ -62,18 +61,32 @@ struct CardView: View {
         switch symbol.pattern {
         case .filled:
             shape.fill().foregroundColor(symbol.color.getColor())
-                .aspectRatio(2/1, contentMode: .fit).opacity(0.7)
+                .aspectRatio(DrawingConstants.symbolAspectRatio, contentMode: .fit).opacity(DrawingConstants.symbolOpacity)
             
         case .shaded:
             StripeView(shape: shape, color: symbol.color.getColor())
-                .aspectRatio(2/1, contentMode: .fit).opacity(0.7)
+                .aspectRatio(DrawingConstants.symbolAspectRatio, contentMode: .fit).opacity(DrawingConstants.symbolOpacity)
             
         case .stroked:
-            shape.stroke(lineWidth: 2).foregroundColor(symbol.color.getColor())
-                .aspectRatio(2/1, contentMode: .fit).opacity(0.7)
+            shape.stroke(lineWidth: DrawingConstants.defaultLineWidth).foregroundColor(symbol.color.getColor())
+                .aspectRatio(DrawingConstants.symbolAspectRatio, contentMode: .fit).opacity(DrawingConstants.symbolOpacity)
         }
     }
     
+    struct DrawingConstants {
+        static let symbolAspectRatio: CGFloat = 2/1
+        static let symbolOpacity: Double = 0.7
+        static let symbolCornerRadius: CGFloat = 50
+        
+        static let defaultLineWidth: CGFloat = 2
+        static let effectLineWidth: CGFloat = 3
+        static let cardCornerRadius: CGFloat = 10
+        static let effectOpacity: Double = 0.1
+    }
+//    static let cornerRadius: CGFloat = 10
+//    static let lineWidth: CGFloat = 2.5
+//    static let fontScale: CGFloat = 0.65
+//    static let circlePadding: CGFloat = 5
 }
 
 //
