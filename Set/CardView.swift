@@ -83,10 +83,6 @@ struct CardView: View {
         static let cardCornerRadius: CGFloat = 10
         static let effectOpacity: Double = 0.1
     }
-//    static let cornerRadius: CGFloat = 10
-//    static let lineWidth: CGFloat = 2.5
-//    static let fontScale: CGFloat = 0.65
-//    static let circlePadding: CGFloat = 5
 }
 
 //
