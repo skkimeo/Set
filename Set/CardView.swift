@@ -13,34 +13,44 @@ struct CardView: View {
     var body: some View {
         ZStack {
             let cardShape = RoundedRectangle(cornerRadius: DrawingConstants.cardCornerRadius)
-            if card.isMatched {
-                cardShape.foregroundColor(.green).opacity(DrawingConstants.effectOpacity)
-                cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.green)
-                
-            } else {
-                cardShape.fill().foregroundColor(.white)
-                cardShape.strokeBorder(lineWidth: DrawingConstants.defaultLineWidth)
-                if card.isChosen {
-                    cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.orange)
-                }
-                VStack {
-                    ForEach(0..<card.symbol.numberOfShapes, id: \.self) { _ in
-                        createSymbol(for: card)
-                    }
-                }
-                .padding()
-                
-                if card.isNotMatched {
-                    cardShape.foregroundColor(.gray).opacity(DrawingConstants.effectOpacity)
-                    cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.gray)
-                }
-                
-                if card.isHint {
-                    cardShape.foregroundColor(.green).opacity(DrawingConstants.effectOpacity)
-                    cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.green)
+            //            if card.isMatched {
+            //
+            //            } else {
+            cardShape.fill().foregroundColor(.white)
+            cardShape.strokeBorder(lineWidth: DrawingConstants.defaultLineWidth)
+            //            if card.isMatched {
+            //                var opacity = DrawingConstants.effectOpacity
+            
+                cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.orange).opacity(card.isChosen ? 1 : 0)
+            
+            VStack {
+                ForEach(0..<card.symbol.numberOfShapes, id: \.self) { _ in
+                    createSymbol(for: card)
                 }
             }
+            .padding()
+            
+            //            if card.isNotMatched {
+            //                cardShape.foregroundColor(.gray).opacity(DrawingConstants.effectOpacity)
+            //                cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.gray)
+            //            }
+            
+            cardShape.foregroundColor(.yellow).opacity( card.isHint ? DrawingConstants.effectOpacity : 0)
+            cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.yellow).opacity(card.isHint ? 1 : 0)
+            cardShape.foregroundColor(.green).opacity(card.isMatched ? DrawingConstants.effectOpacity : 0).animation(.easeInOut)
+            
+            cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.green).opacity(card.isMatched ? 1 : 0)
+            cardShape.strokeBorder(lineWidth: DrawingConstants.effectLineWidth).foregroundColor(.gray).opacity(card.isNotMatched ? 1 : 0)
+            
+            //            }
         }
+        // change with customed shake viewModifier later on
+        .rotationEffect(Angle.degrees(card.isNotMatched ? 3 : 0))
+    
+        .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
+        
+        //        }
+        
     }
     
     @ViewBuilder
@@ -84,6 +94,9 @@ struct CardView: View {
         static let effectOpacity: Double = 0.1
     }
 }
+
+
+
 
 //
 //struct CardView_Previews: PreviewProvider {

@@ -22,10 +22,9 @@ struct SunSetGameView: View {
                 
                 if !game.isEndOfGame {
                     AspectVGrid(items: game.playingCards, aspectRatio: 2/3) { card in
-                        if !matchedCards.contains(card) {
                             CardView(card: card)
 //                                .matchedGeometryEffect(id: card.id, in: discardSpace)
-                                .matchedGeometryEffect(id: card.id, in: deckSpace)
+                                .matchedGeometryEffect(id: card.id, in: deckSpace) //.animation(.easeInOut(duration: 0.5).delay(0.5))
                                 .padding(5)
                                 .onTapGesture {
                                     withAnimation(.easeInOut) {
@@ -33,18 +32,6 @@ struct SunSetGameView: View {
                                         game.choose(card)
                                     }
                                 }
-                        } else {
-                            CardView(card: card)
-                                .matchedGeometryEffect(id: card.id, in: discardSpace)
-//                                .matchedGeometryEffect(id: card.id, in: deckSpace)
-                                .padding(5)
-                                .onTapGesture {
-                                    withAnimation(.easeInOut) {
-                                        getPiledCards()
-                                        game.choose(card)
-                                    }
-                                }
-                        }
                     }
                     .onAppear() {
                         
@@ -99,7 +86,7 @@ struct SunSetGameView: View {
         .frame(width: 60, height: 90)
         .onTapGesture {
             getPiledCards()
-            withAnimation(.easeInOut(duration: 0.5).delay(0.5)) {
+            withAnimation() {
                 game.dealThreeCards()
             }
         }
@@ -133,7 +120,7 @@ struct SunSetGameView: View {
             Color.clear
             ForEach(matchedCards) { card in
                 CardView(card: card)
-                    .matchedGeometryEffect(id: card.id, in: discardSpace)
+//                    .matchedGeometryEffect(id: card.id, in: discardSpace)
             }
         }
         .frame(width: 60, height: 90)
