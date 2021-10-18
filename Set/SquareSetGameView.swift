@@ -10,6 +10,10 @@ import SwiftUI
 struct SunSetGameView: View {
     @ObservedObject var game: SunSetGame
     
+    @Namespace var discardSpace
+    @Namespace var deckSpace
+    
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -18,14 +22,32 @@ struct SunSetGameView: View {
                 
                 if !game.isEndOfGame {
                     AspectVGrid(items: game.playingCards, aspectRatio: 2/3) { card in
-                        CardView(card: card)
-                            .padding(5)
-                            .onTapGesture {
-//                                withAnimation(.easeInOut(duration: 4)) {
-                                getPiledCards()
-                                    game.choose(card)
-//                                }
-                            }
+                        if !matchedCards.contains(card) {
+                            CardView(card: card)
+//                                .matchedGeometryEffect(id: card.id, in: discardSpace)
+                                .matchedGeometryEffect(id: card.id, in: deckSpace)
+                                .padding(5)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut) {
+                                        getPiledCards()
+                                        game.choose(card)
+                                    }
+                                }
+                        } else {
+                            CardView(card: card)
+                                .matchedGeometryEffect(id: card.id, in: discardSpace)
+//                                .matchedGeometryEffect(id: card.id, in: deckSpace)
+                                .padding(5)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut) {
+                                        getPiledCards()
+                                        game.choose(card)
+                                    }
+                                }
+                        }
+                    }
+                    .onAppear() {
+                        
                     }
                 } else {
                     Text("Game Over").foregroundColor(.green).font(.largeTitle)
@@ -67,20 +89,24 @@ struct SunSetGameView: View {
     var deckBody: some View {
         ZStack {
             ForEach(game.allCards.filter(isUndealt)) { card in
-                CardView(card: card)
-                    .zIndex(zIndex(of: card))
+                    CardView(card: card)
+                        .matchedGeometryEffect(id: card.id, in: deckSpace)
+                        .zIndex(zIndex(of: card))
+    
             }
-            RoundedRectangle(cornerRadius: 10).foregroundColor(.blue)
+//            RoundedRectangle(cornerRadius: 10).foregroundColor(.blue)
         }
         .frame(width: 60, height: 90)
         .onTapGesture {
             getPiledCards()
-            game.dealThreeCards()
+            withAnimation(.easeInOut(duration: 0.5).delay(0.5)) {
+                game.dealThreeCards()
+            }
         }
     }
     
     @State var matchedCards = [SunSetGame.Card]()
-
+    
     private func getPiledCards() {
         for card in game.allCards.filter({ $0.isMatched }) {
             var dup = card
@@ -89,31 +115,35 @@ struct SunSetGameView: View {
                 matchedCards.append(dup)
             }
         }
-//        return matchedCards
+        //        return matchedCards
     }
-//    @State var matched = [s]
-//    var matchedCards: [SunSetGame.Card] {
-//        var cards = [SunSetGame.Card]()
-//        for card in game.allCards.filter({ $0.isMatched }) {
-//            var dup = card
-//            dup.isMatched = false
-//            cards.append(dup)
-//        }
-//        return cards
-//    }
+    //    @State var matched = [s]
+    //    var matchedCards: [SunSetGame.Card] {
+    //        var cards = [SunSetGame.Card]()
+    //        for card in game.allCards.filter({ $0.isMatched }) {
+    //            var dup = card
+    //            dup.isMatched = false
+    //            cards.append(dup)
+    //        }
+    //        return cards
+    //    }
     
     var discardPileBody: some View {
         return ZStack {
             Color.clear
             ForEach(matchedCards) { card in
                 CardView(card: card)
+                    .matchedGeometryEffect(id: card.id, in: discardSpace)
             }
         }
         .frame(width: 60, height: 90)
     }
     
     var restart: some View {
-        Button("Restart") { game.newGame() }
+        Button("Restart") {
+            matchedCards = []
+            game.newGame()
+        }
     }
     
     var cheat: some View {
