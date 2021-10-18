@@ -30,13 +30,13 @@ struct SunSetGameView: View {
                 
                 HStack {
                     Spacer()
-                    Button { game.newGame() } label: { Text("New Game") }
+                    restart
                     Spacer()
                     if !game.isEndOfGame {
-                        Button { game.cheat() } label: { Text("Cheat") }
+                        cheat
                         Spacer()
                         if game.numberOfPlayedCards < game.totalNumberOfCards {
-                            Button { game.dealThreeCards() } label: { Text("Deal 3 Cards") }
+                            deal3Cards
                         } else {
                             Text("Deal 3 Cards").foregroundColor(.gray)
                         }
@@ -50,7 +50,31 @@ struct SunSetGameView: View {
             .navigationBarTitle("Sun-Set!")
         }
     }
+    
+    var restart: some View {
+        Button("Restart") { game.newGame() }
+    }
+    
+    var cheat: some View {
+        Button("Cheat") { game.cheat() }
+    }
+    
+    var deal3Cards: some View {
+        Button("Deal 3 Cards") { game.dealThreeCards() }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

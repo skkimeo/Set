@@ -29,7 +29,6 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             chosenCards.forEach { card in
                 if let matchedIndex = playingCards.firstIndex(of: card) {
                     playingCards.remove(at: matchedIndex)
-                    dealOneCard(at: matchedIndex)
                 }
             }
         }
