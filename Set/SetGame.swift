@@ -16,7 +16,11 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private var initialNumberOfPlayingCards: Int
     
     private let createCardSymbol: (Int) -> Card.CardContent
-    private(set) var playingCards: [Card]
+    private(set) var playingCards = [Card]()
+    private(set) var allCards = [Card]()
+    private(set) var deckCards =  [Card]()
+    
+    
     private(set) var remainingSet: [Card]?
     
     private(set) var score = 0
@@ -79,6 +83,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                         chosenCards.forEach { card in
                             let index = playingCards.firstIndex(of: card)!
                             playingCards[index].isMatched = true
+                            allCards[allCards.firstIndex(of: card)!].isMatched = true
                         }
                         
                         if numberOfPlayedCards == totalNumberOfCards {
@@ -157,9 +162,30 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         
         switch chosenCards.count {
         case 3:
-            let chosenCard = playingCards.first(where: { $0  == chosenCards.first})!
-            resetChosenCards()
-            if chosenCard.isMatched { fallthrough }
+            if playingCards.first(where: {$0 == chosenCards.first})!.isMatched {
+                chosenCards.forEach { card in
+                    if let matchedIndex = playingCards.firstIndex(of: card) {
+                        playingCards.remove(at: matchedIndex)
+                        dealOneCard(at: matchedIndex)
+                    }
+                }
+                chosenCards = []
+            }
+            else {
+                chosenCards.forEach { card in
+                    if let failedMatchIndex = playingCards.firstIndex(of: card) {
+                        playingCards[failedMatchIndex].isChosen = false
+                        playingCards[failedMatchIndex].isNotMatched = false
+                    }
+                }
+                chosenCards = []
+                fallthrough
+            }
+//            chosenCards = []
+//
+//            let chosenCard = playingCards.first(where: { $0  == chosenCards.first})!
+//            resetChosenCards()
+//            if !chosenCard.isMatched { fallthrough }
         default:
             for _ in 0..<3 {
                 dealOneCard(at: playingCards.endIndex)
@@ -208,12 +234,21 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         self.initialNumberOfPlayingCards = initialNumberOfPlayingCards
         self.totalNumberOfCards = totalNumberOfCards
         self.createCardSymbol = createCardContent
-        playingCards = []
-        for _ in 0..<initialNumberOfPlayingCards {
-            let content = createCardContent(numberOfPlayedCards)
-            playingCards.append(Card(symbol: content, id: numberOfPlayedCards))
-            numberOfPlayedCards += 1
+        
+        for index in 0..<totalNumberOfCards {
+            let content = createCardContent(index)
+            if index < initialNumberOfPlayingCards {
+                playingCards.append(Card(symbol: content, id: index))
+            }
+            allCards.append(Card(symbol: content, id: index))
         }
+        numberOfPlayedCards = initialNumberOfPlayingCards
+//        playingCards = []
+//        for _ in 0..<initialNumberOfPlayingCards {
+//            let content = createCardContent(numberOfPlayedCards)
+//            playingCards.append(Card(symbol: content, id: numberOfPlayedCards))
+//            numberOfPlayedCards += 1
+//        }
     }
     
     struct Card: Identifiable, Equatable {

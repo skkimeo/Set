@@ -52,7 +52,11 @@ class SunSetGame: ObservableObject {
     
     @Published private var model = createSetGame()
     
-    var cards: [Card] {
+    var allCards: [Card] {
+        model.allCards
+    }
+    
+    var playingCards: [Card] {
         model.playingCards
     }
     
