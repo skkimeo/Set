@@ -1,5 +1,5 @@
 //
-//  SquareSetGame.swift
+//  SunSetGame.swift
 //  Set
 //
 //  Created by sun on 2021/10/07.

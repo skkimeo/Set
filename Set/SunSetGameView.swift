@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  SunSetGameView.swift
 //  Set
 //
 //  Created by sun on 2021/10/07.
@@ -14,6 +14,8 @@ struct SunSetGameView: View {
     @Namespace var deckSpace
     
     
+    @State var initialCards = [SunSetGame.Card]()
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -22,9 +24,12 @@ struct SunSetGameView: View {
                 
                 if !game.isEndOfGame {
                     AspectVGrid(items: game.playingCards, aspectRatio: 2/3) { card in
+//                        if initialCards.isEmpty {
+//                            Color.clear
+//                        } else {
                             CardView(card: card)
-//                                .matchedGeometryEffect(id: card.id, in: discardSpace)
-                                .matchedGeometryEffect(id: card.id, in: deckSpace) //.animation(.easeInOut(duration: 0.5).delay(0.5))
+                                .matchedGeometryEffect(id: card.id, in: discardSpace)
+                                .matchedGeometryEffect(id: card.id * 100, in: deckSpace) //.animation(.easeInOut(duration: 0.5).delay(0.5))
                                 .padding(5)
                                 .onTapGesture {
                                     withAnimation(.easeInOut) {
@@ -32,9 +37,7 @@ struct SunSetGameView: View {
                                         game.choose(card)
                                     }
                                 }
-                    }
-                    .onAppear() {
-                        
+//                        }
                     }
                 } else {
                     Text("Game Over").foregroundColor(.green).font(.largeTitle)
@@ -75,18 +78,20 @@ struct SunSetGameView: View {
     
     var deckBody: some View {
         ZStack {
+            
             ForEach(game.allCards.filter(isUndealt)) { card in
-                    CardView(card: card)
-                        .matchedGeometryEffect(id: card.id, in: deckSpace)
-                        .zIndex(zIndex(of: card))
-    
+                CardView(card: card)
+                    .matchedGeometryEffect(id: card.id * 100, in: deckSpace)
+                    .zIndex(zIndex(of: card))
+                
             }
-//            RoundedRectangle(cornerRadius: 10).foregroundColor(.blue)
         }
         .frame(width: 60, height: 90)
         .onTapGesture {
-            getPiledCards()
-            withAnimation() {
+            withAnimation {
+                getPiledCards()
+            }
+            withAnimation(.linear(duration: 0.1).delay(0.25)) {
                 game.dealThreeCards()
             }
         }
@@ -102,25 +107,14 @@ struct SunSetGameView: View {
                 matchedCards.append(dup)
             }
         }
-        //        return matchedCards
     }
-    //    @State var matched = [s]
-    //    var matchedCards: [SunSetGame.Card] {
-    //        var cards = [SunSetGame.Card]()
-    //        for card in game.allCards.filter({ $0.isMatched }) {
-    //            var dup = card
-    //            dup.isMatched = false
-    //            cards.append(dup)
-    //        }
-    //        return cards
-    //    }
     
     var discardPileBody: some View {
         return ZStack {
             Color.clear
             ForEach(matchedCards) { card in
                 CardView(card: card)
-//                    .matchedGeometryEffect(id: card.id, in: discardSpace)
+                    .matchedGeometryEffect(id: card.id, in: discardSpace)
             }
         }
         .frame(width: 60, height: 90)
